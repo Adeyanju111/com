@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ConstructPro · Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        .login-wrapper {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .login-wrapper h2 {
+            color: #F28500;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        .login-wrapper input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            outline: none;
+        }
+        .login-wrapper input:focus {
+            border-color: #F28500;
+        }
+        .login-wrapper button {
+            width: 100%;
+            padding: 16px;
+            background: #F28500;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .error-msg {
+            color: #b00020;
+            margin-top: 0.5rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: none;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .header {
+            background: white;
+            padding: 1rem 1.2rem;
+            border-radius: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 6px 14px #00000010;
+        }
+        .header h1 {
+            color: #F28500;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .analytics-link {
+            background: #D6CB8D;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #2d2d2d;
+            text-decoration: none;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-btn {
+            background: #F28500;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.2rem 1rem;
+            box-shadow: 0 8px 18px -8px #00000020;
+        }
+        .card h3 {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            text-transform: uppercase;
+        }
+        .card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+        .form-panel {
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            box-shadow: 0 12px 24px -12px #00000030;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            flex: 1 1 200px;
+            min-width: 150px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 12px;
+            font-size: 16px;
+            border: 1.5px solid #ddd;
+            border-radius: 24px;
+        }
+        .form-group.check-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group.check-group input {
+            width: 22px;
+            height: 22px;
+        }
+        .items-table-wrapper {
+            overflow-x: auto;
+            margin: 15px 0;
+            border-radius: 24px;
+            border: 1px solid #eaeaea;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        .items-table th {
+            background: #F2850010;
+            padding: 12px 8px;
+        }
+        .items-table td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #eee;
+        }
+        .items-table input {
+            width: 100%;
+            padding: 12px 6px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .remove-item-btn {
+            background: #ffc2a1;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 12px;
+            font-weight: bold;
+            color: #a10000;
+            cursor: pointer;
+        }
+        .add-item-btn {
+            background: #D6CB8D;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .quotation-preview {
+            background: #f0f0f0;
+            border-radius: 28px;
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            word-break: break-word;
+            margin: 12px 0;
+        }
+        
+        .totals-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #F2850008;
+            border-radius: 28px;
+            border: 1px solid #F2850030;
+        }
+        .total-item {
+            flex: 1 1 200px;
+        }
+        .total-item .label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .total-item .amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .total-item .amount.quote-total {
+            color: #F28500;
+        }
+        
+        .profit-loss {
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 10px 0;
+        }
+        .profit { color: #0f7b3a; }
+        .loss { color: #b13e3e; }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0 10px;
+        }
+        .action-buttons button {
+            flex: 1 1 120px;
+            padding: 16px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .save-btn { background: #F28500; color: white; }
+        .cancel-btn { background: #e0e0e0; }
+
+        .records-table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 32px;
+            padding: 0.5rem;
+        }
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        .records-table th {
+            background: #D6CB8D;
+            padding: 14px 5px;
+            position: sticky;
+            top: 0;
+        }
+        .records-table td {
+            padding: 12px 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tag {
+            display: inline-block;
+            background: #F2850020;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin: 2px;
+            border: 1px solid #F2850060;
+        }
+        .edit-btn, .delete-btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .edit-btn { background: #D6CB8D; }
+        .delete-btn { background: #f8d7da; color: #b02a37; }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        .toast {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            border-left: 8px solid;
+            animation: slide 0.2s;
+        }
+        .toast.success { border-color: #0f7b3a; }
+        .toast.error { border-color: #b13e3e; }
+        .toast.info { border-color: #F28500; }
+        @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        .loader {
+            border: 5px solid #f3f3f3; border-top: 5px solid #F28500; border-radius: 50%;
+            width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @media (max-width: 600px) {
+            .form-row { flex-direction: column; }
+            .action-buttons button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="login-wrapper">
+        <h2>🔐 CONSTRUCT PRO</h2>
+        <input type="password" id="passwordInput" placeholder="enter password" inputmode="numeric">
+        <button id="loginBtn">LOGIN</button>
+        <div id="loginError" class="error-msg"></div>
+    </div>
+
+    <div id="appMain" class="app-container">
+        <div class="header">
+            <h1>🏗️ ConstructPro</h1>
+            <div class="header-actions">
+                <a href="analytics.html" class="analytics-link">📊 Analytics</a>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div class="card"><h3>📋 Total records</h3><div class="value" id="totalRecords">0</div></div>
+            <div class="card"><h3>💰 Quotations total</h3><div class="value" id="totalQuotations">₦0</div></div>
+            <div class="card"><h3>💵 Payments</h3><div class="value" id="totalPayments">₦0</div></div>
+            <div class="card"><h3>📈 Profit</h3><div class="value" id="totalProfit">₦0</div></div>
+            <div class="card"><h3>🟡 Pending checkups</h3><div class="value" id="pendingCheck">0</div></div>
+        </div>
+
+        <div class="form-panel">
+            <h3>➕ Add / Edit Record</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Client Name *</label><input type="text" id="clientName" placeholder="e.g. Hassan Bello"></div>
+                <div class="form-group"><label>Address *</label><input type="text" id="address" placeholder="No 3, road..."></div>
+                <div class="form-group"><label>Quotation Ref</label><input type="text" id="quotationRef" placeholder="Q-242"></div>
+            </div>
+
+            <label><strong>📦 Quotation Items</strong></label>
+            <div class="items-table-wrapper">
+                <table class="items-table">
+                    <thead><tr><th>Item Name</th><th>Qty</th><th>Unit Price (₦)</th><th>Line Total</th><th></th></tr></thead>
+                    <tbody id="itemsBody"></tbody>
+                </table>
+            </div>
+            <button class="add-item-btn" id="addItemBtn">➕ Add Item</button>
+            <div class="quotation-preview" id="quotationPreview"></div>
+
+            <div class="totals-row">
+                <div class="total-item">
+                    <div class="label">Quotation Total</div>
+                    <div class="amount quote-total" id="quotationTotalDisplay">₦0.00</div>
+                </div>
+                <div class="total-item">
+                    <div class="label">Payment Received</div>
+                    <div class="amount" id="paymentDisplay">₦0.00</div>
+                </div>
+                <div class="total-item">
+                    <div class="label">Material Cost</div>
+                    <div class="amount" id="materialDisplay">₦0.00</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>Payment Received (₦)</label><input type="number" id="paymentAmount" step="0.01" value="0"></div>
+                <div class="form-group"><label>Material Cost (₦)</label><input type="number" id="materialCost" step="0.01" value="0"></div>
+                <div class="form-group"><label>Transport (₦)</label><input type="number" id="transportCost" step="0.01" value="0"></div>
+                <div class="form-group"><label>Other Cost (₦)</label><input type="number" id="otherCost" step="0.01" value="0"></div>
+                <div class="form-group check-group"><label>Check-up Needed?</label><input type="checkbox" id="checkUpNeeded"></div>
+                <div class="form-group"><label>Check-up Date</label><input type="date" id="checkUpDate"></div>
+            </div>
+
+            <div class="profit-loss" id="profitDisplay">₦0.00</div>
+            <div class="action-buttons">
+                <button class="save-btn" id="saveRecordBtn">💾 Save</button>
+                <button class="cancel-btn" id="cancelFormBtn">✖ Cancel</button>
+            </div>
+            <input type="hidden" id="editId" value="">
+        </div>
+
+        <div class="records-table-wrapper">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th>
+                        <th>Quote Total</th><th>Payment</th><th>Material</th><th>Transport</th>
+                        <th>Other</th><th>Expenses</th><th>Profit</th><th>Check-up</th><th>Date</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        (function() {
+            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec';
+            const PASSWORD = '1001';
+            
+            let records = [];
+            let editId = null;
+            let items = [{ name: '', quantity: 1, unitPrice: 0 }];
+
+            const toast = (msg, type = 'info') => {
+                const container = document.getElementById('toastContainer');
+                const el = document.createElement('div');
+                el.className = `toast ${type}`;
+                el.innerText = msg;
+                container.appendChild(el);
+                setTimeout(() => el.remove(), 3500);
+            };
+
+            const showLoader = (show) => {
+                let loader = document.getElementById('globalLoader');
+                if (!loader) {
+                    loader = document.createElement('div');
+                    loader.id = 'globalLoader';
+                    loader.className = 'loader';
+                    loader.style.position = 'fixed';
+                    loader.style.top = '50%';
+                    loader.style.left = '50%';
+                    loader.style.transform = 'translate(-50%,-50%)';
+                    loader.style.zIndex = '10000';
+                    document.body.appendChild(loader);
+                }
+                loader.style.display = show ? 'block' : 'none';
+            };
+
+            const formatMoney = (val) => '₦' + Number(val).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            const parseItemsFromString = (str) => {
+                if (!str) return [{ name: '', quantity: 1, unitPrice: 0 }];
+                return str.split(',').map(s => {
+                    const parts = s.trim().split('-');
+                    return { 
+                        name: parts[0] || '', 
+                        quantity: parseFloat(parts[1]) || 1, 
+                        unitPrice: parseFloat(parts[2]) || 0 
+                    };
+                }).filter(i => i.name);
+            };
+
+            const stringifyItems = (itemsArr) => {
+                return itemsArr.filter(i => i.name.trim() !== '')
+                    .map(i => `${i.name.trim()}-${i.quantity || 1}-${i.unitPrice || 0}`)
+                    .join(',');
+            };
+
+            const lineTotal = (item) => (item.quantity || 0) * (item.unitPrice || 0);
+
+            function calculateQuoteTotal() {
+                return items.reduce((acc, i) => acc + lineTotal(i), 0);
+            }
+
+            function renderItemsTable() {
+                const tbody = document.getElementById('itemsBody');
+                let html = '';
+                items.forEach((item, idx) => {
+                    const total = lineTotal(item);
+                    html += `<tr>
+                        <td><input type="text" value="${item.name.replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
+                        <td><input type="number" value="${item.quantity}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
+                        <td><input type="number" value="${item.unitPrice}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
+                        <td>${formatMoney(total)}</td>
+                        <td><button class="remove-item-btn" data-index="${idx}">✖</button></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+
+                document.querySelectorAll('.item-input').forEach(inp => {
+                    inp.addEventListener('input', function(e) {
+                        const idx = this.dataset.index;
+                        const field = this.dataset.field;
+                        let val = this.value;
+                        if (field === 'quantity' || field === 'unitPrice') val = parseFloat(val) || 0;
+                        items[idx][field] = field === 'name' ? val : (parseFloat(val) || 0);
+                        const row = this.closest('tr');
+                        if (row && (field === 'quantity' || field === 'unitPrice')) {
+                            const totalCell = row.cells[3];
+                            if (totalCell) totalCell.innerText = formatMoney(lineTotal(items[idx]));
+                        }
+                        updateTotals();
+                    });
+                });
+
+                document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = e.target.dataset.index;
+                        if (items.length > 1) {
+                            items.splice(idx, 1);
+                        } else {
+                            items[0] = { name: '', quantity: 1, unitPrice: 0 };
+                        }
+                        renderItemsTable();
+                        updateTotals();
+                    });
+                });
+            }
+
+            function updateTotals() {
+                const validItems = items.filter(i => i.name.trim() !== '');
+                const quoteTotal = validItems.reduce((acc, i) => acc + lineTotal(i), 0);
+                const payment = parseFloat(document.getElementById('paymentAmount').value) || 0;
+                const material = parseFloat(document.getElementById('materialCost').value) || 0;
+                const transport = parseFloat(document.getElementById('transportCost').value) || 0;
+                const other = parseFloat(document.getElementById('otherCost').value) || 0;
+
+                document.getElementById('quotationPreview').innerText = validItems.length ? stringifyItems(validItems) : '(empty)';
+                document.getElementById('quotationTotalDisplay').innerText = formatMoney(quoteTotal);
+                document.getElementById('paymentDisplay').innerText = formatMoney(payment);
+                
+                const totalExpenses = material + transport + other;
+                document.getElementById('materialDisplay').innerText = formatMoney(totalExpenses);
+                
+                // PROFIT = PAYMENT - QUOTATION TOTAL
+                const profit = payment - quoteTotal;
+                const profitEl = document.getElementById('profitDisplay');
+                profitEl.innerText = formatMoney(profit);
+                profitEl.className = 'profit-loss ' + (profit >= 0 ? 'profit' : 'loss');
+            }
+
+            function resetForm() {
+                document.getElementById('clientName').value = '';
+                document.getElementById('address').value = '';
+                document.getElementById('quotationRef').value = '';
+                document.getElementById('paymentAmount').value = 0;
+                document.getElementById('materialCost').value = 0;
+                document.getElementById('transportCost').value = 0;
+                document.getElementById('otherCost').value = 0;
+                document.getElementById('checkUpNeeded').checked = false;
+                document.getElementById('checkUpDate').value = '';
+                document.getElementById('editId').value = '';
+                items = [{ name: '', quantity: 1, unitPrice: 0 }];
+                renderItemsTable();
+                updateTotals();
+                editId = null;
+            }
+
+            function loadRecordForEdit(rec) {
+                document.getElementById('clientName').value = rec.client_name || '';
+                document.getElementById('address').value = rec.address || '';
+                document.getElementById('quotationRef').value = rec.quotation_ref || '';
+                document.getElementById('paymentAmount').value = rec.payment_amount || 0;
+                document.getElementById('materialCost').value = rec.material_cost || 0;
+                document.getElementById('transportCost').value = rec.transport_cost || 0;
+                document.getElementById('otherCost').value = rec.other_cost || 0;
+                document.getElementById('checkUpNeeded').checked = (rec.check_up || 'No') === 'Yes';
+                document.getElementById('checkUpDate').value = rec.date || '';
+                document.getElementById('editId').value = rec.id;
+                items = parseItemsFromString(rec.quotation_details || '');
+                if (items.length === 0) items = [{ name: '', quantity: 1, unitPrice: 0 }];
+                renderItemsTable();
+                updateTotals();
+                editId = rec.id;
+            }
+
+            async function fetchRecords() {
+                showLoader(true);
+                try {
+                    const res = await fetch(`${API_URL}?action=getAll`);
+                    const data = await res.json();
+                    records = data.records || [];
+                    
+                    const tbody = document.getElementById('tableBody');
+                    let html = '';
+                    let totalQuot = 0, totalPay = 0, totalProf = 0, pending = 0;
+                    
+                    records.forEach(r => {
+                        const itemsArr = parseItemsFromString(r.quotation_details);
+                        const tags = itemsArr.map(i => `<span class="tag">${i.name}-${i.quantity}</span>`).join(' ');
+                        
+                        // Force correct profit calculation
+                        const payment = parseFloat(r.payment_amount) || 0;
+                        const quoteTotal = parseFloat(r.quotation_total) || 0;
+                        const profit = payment - quoteTotal;
+                        
+                        totalQuot += quoteTotal;
+                        totalPay += payment;
+                        totalProf += profit;
+                        if (r.check_up === 'Yes') pending++;
+                        
+                        html += `<tr>
+                            <td>${r.id}</td><td>${r.client_name}</td><td>${r.address}</td><td>${r.quotation_ref || ''}</td>
+                            <td>${tags}</td><td>${formatMoney(quoteTotal)}</td><td>${formatMoney(payment)}</td>
+                            <td>${formatMoney(r.material_cost)}</td><td>${formatMoney(r.transport_cost)}</td>
+                            <td>${formatMoney(r.other_cost)}</td><td>${formatMoney((parseFloat(r.material_cost)||0)+(parseFloat(r.transport_cost)||0)+(parseFloat(r.other_cost)||0))}</td>
+                            <td class="${profit>=0?'profit':'loss'}">${formatMoney(profit)}</td>
+                            <td>${r.check_up}</td><td>${r.date || ''}</td>
+                            <td><button class="edit-btn" data-id="${r.id}">Edit</button> <button class="delete-btn" data-id="${r.id}">Del</button></td>
+                        </tr>`;
+                    });
+                    
+                    tbody.innerHTML = html;
+                    document.getElementById('totalRecords').innerText = records.length;
+                    document.getElementById('totalQuotations').innerText = formatMoney(totalQuot);
+                    document.getElementById('totalPayments').innerText = formatMoney(totalPay);
+                    document.getElementById('totalProfit').innerText = formatMoney(totalProf);
+                    document.getElementById('pendingCheck').innerText = pending;
+
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const id = e.target.dataset.id;
+                            const rec = records.find(r => r.id == id);
+                            if (rec) loadRecordForEdit(rec);
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', async (e) => {
+                            if (!confirm('Delete record?')) return;
+                            const id = e.target.dataset.id;
+                            showLoader(true);
+                            try {
+                                await fetch(API_URL, { 
+                                    method: 'POST', 
+                                    body: JSON.stringify({ action: 'delete', id: id }) 
+                                });
+                                toast('Deleted', 'success');
+                                fetchRecords();
+                            } catch { 
+                                toast('Error', 'error'); 
+                            } finally { 
+                                showLoader(false); 
+                            }
+                        });
+                    });
+                    
+                } catch (e) {
+                    toast('Failed to load data', 'error');
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            async function saveRecord() {
+                const client = document.getElementById('clientName').value.trim();
+                const address = document.getElementById('address').value.trim();
+                if (!client || !address) { 
+                    toast('Client and address required', 'error'); 
+                    return; 
+                }
+                
+                const validItems = items.filter(i => i.name.trim() !== '');
+                const quoteTotal = validItems.reduce((acc, i) => acc + lineTotal(i), 0);
+                const payment = parseFloat(document.getElementById('paymentAmount').value) || 0;
+                const profit = payment - quoteTotal;
+                
+                if (payment < quoteTotal) {
+                    if (!confirm(`Warning: Payment (${formatMoney(payment)}) is less than Quotation Total (${formatMoney(quoteTotal)}). Loss will be ${formatMoney(profit)}. Continue?`)) {
+                        return;
+                    }
+                }
+                
+                const payload = {
+                    action: editId ? 'update' : 'add',
+                    id: editId || undefined,
+                    client_name: client,
+                    address: address,
+                    quotation_ref: document.getElementById('quotationRef').value,
+                    quotation_details: stringifyItems(items),
+                    payment_amount: payment,
+                    material_cost: parseFloat(document.getElementById('materialCost').value) || 0,
+                    transport_cost: parseFloat(document.getElementById('transportCost').value) || 0,
+                    other_cost: parseFloat(document.getElementById('otherCost').value) || 0,
+                    check_up: document.getElementById('checkUpNeeded').checked ? 'Yes' : 'No',
+                    date: document.getElementById('checkUpDate').value || '',
+                };
+                
+                showLoader(true);
+                try {
+                    const res = await fetch(API_URL, { 
+                        method: 'POST', 
+                        body: JSON.stringify(payload) 
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        toast('Saved', 'success');
+                        resetForm();
+                        fetchRecords();
+                    } else {
+                        toast('Save failed', 'error');
+                    }
+                } catch (e) { 
+                    toast('Save failed', 'error'); 
+                } finally { 
+                    showLoader(false); 
+                }
+            }
+
+            // Login
+            if (sessionStorage.getItem('auth') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appMain').style.display = 'flex';
+                fetchRecords();
+            }
+
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const pwd = document.getElementById('passwordInput').value;
+                if (pwd === PASSWORD) {
+                    sessionStorage.setItem('auth', 'true');
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('appMain').style.display = 'flex';
+                    fetchRecords();
+                } else {
+                    document.getElementById('loginError').innerText = 'Incorrect password';
+                }
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                sessionStorage.removeItem('auth');
+                location.reload();
+            });
+
+            document.getElementById('addItemBtn').addEventListener('click', () => {
+                items.push({ name: '', quantity: 1, unitPrice: 0 });
+                renderItemsTable();
+                updateTotals();
+            });
+
+            ['paymentAmount', 'materialCost', 'transportCost', 'otherCost'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateTotals);
+            });
+
+            document.getElementById('saveRecordBtn').addEventListener('click', saveRecord);
+            document.getElementById('cancelFormBtn').addEventListener('click', resetForm);
+
+            resetForm();
+        })();
+    </script>
+</body>
+</html>
