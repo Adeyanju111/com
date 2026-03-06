@@ -19,6 +19,7 @@
             justify-content: center;
             padding: 12px;
         }
+        /* login container */
         .login-wrapper {
             width: 100%;
             max-width: 400px;
@@ -32,7 +33,7 @@
             color: #F28500;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 6vw, 2rem);
         }
         .login-wrapper input {
             width: 100%;
@@ -42,6 +43,7 @@
             border-radius: 50px;
             margin-bottom: 1rem;
             outline: none;
+            transition: border 0.2s;
         }
         .login-wrapper input:focus {
             border-color: #F28500;
@@ -54,14 +56,19 @@
             border-radius: 50px;
             color: white;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             cursor: pointer;
+            box-shadow: 0 8px 14px -6px #F2850080;
+            transition: 0.1s;
         }
+        .login-wrapper button:active { transform: scale(0.98); }
         .error-msg {
             color: #b00020;
             margin-top: 0.5rem;
+            font-size: 0.95rem;
         }
 
+        /* main app (hidden by default) */
         .app-container {
             width: 100%;
             max-width: 1400px;
@@ -70,6 +77,7 @@
             flex-direction: column;
             gap: 1.2rem;
         }
+        /* header */
         .header {
             background: white;
             padding: 1rem 1.2rem;
@@ -79,45 +87,78 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 6px 14px #00000010;
+            gap: 15px;
         }
         .header h1 {
             color: #F28500;
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 600;
+            letter-spacing: -0.5px;
         }
-        .header-actions {
+        .header-right {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
-        .analytics-link {
+        .nav-btn {
             background: #D6CB8D;
             border: none;
             padding: 10px 20px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 1rem;
-            color: #2d2d2d;
+            cursor: pointer;
             text-decoration: none;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            color: #2d2d2d;
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
         .logout-btn {
             background: #F28500;
+            color: white;
             border: none;
             padding: 10px 24px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 1rem;
-            color: white;
             cursor: pointer;
             min-height: 44px;
+            min-width: 44px;
+            white-space: nowrap;
         }
+        
+        /* data status banner */
+        .data-status {
+            background: #fff3e0;
+            border-left: 8px solid #F28500;
+            padding: 1rem 1.5rem;
+            border-radius: 32px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .status-icon {
+            font-size: 2rem;
+        }
+        .status-text {
+            flex: 1;
+            min-width: 200px;
+        }
+        .status-text h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: clamp(1rem, 4vw, 1.2rem);
+        }
+        .status-text p {
+            color: #666;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
+        }
+        
+        /* summary cards */
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
         }
         .card {
@@ -125,18 +166,26 @@
             border-radius: 28px;
             padding: 1.2rem 1rem;
             box-shadow: 0 8px 18px -8px #00000020;
+            overflow: hidden;
         }
         .card h3 {
-            font-size: 0.9rem;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
             color: #4a4a4a;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .card .value {
-            font-size: 2rem;
+            font-size: clamp(1.4rem, 5vw, 2rem);
             font-weight: 700;
             color: #1e1e1e;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
+        /* form panel */
         .form-panel {
             background: white;
             border-radius: 32px;
@@ -156,26 +205,33 @@
         .form-group label {
             display: block;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
             margin-bottom: 5px;
             color: #333;
         }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 14px 12px;
             font-size: 16px;
             border: 1.5px solid #ddd;
             border-radius: 24px;
+            background: white;
         }
         .form-group.check-group {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
+        }
+        .form-group.check-group label { 
+            margin-bottom: 0;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
         }
         .form-group.check-group input {
             width: 22px;
             height: 22px;
         }
+        /* quotation items table */
         .items-table-wrapper {
             overflow-x: auto;
             margin: 15px 0;
@@ -190,6 +246,8 @@
         .items-table th {
             background: #F2850010;
             padding: 12px 8px;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            white-space: nowrap;
         }
         .items-table td {
             padding: 8px 4px;
@@ -211,6 +269,8 @@
             font-weight: bold;
             color: #a10000;
             cursor: pointer;
+            min-width: 44px;
+            white-space: nowrap;
         }
         .add-item-btn {
             background: #D6CB8D;
@@ -220,20 +280,23 @@
             font-weight: 600;
             margin: 10px 0;
             cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            white-space: nowrap;
         }
         .quotation-preview {
             background: #f0f0f0;
             border-radius: 28px;
             padding: 12px 18px;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
             word-break: break-word;
             margin: 12px 0;
         }
         
+        /* totals display */
         .totals-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             margin: 15px 0;
             padding: 15px;
             background: #F2850008;
@@ -241,25 +304,30 @@
             border: 1px solid #F2850030;
         }
         .total-item {
-            flex: 1 1 200px;
+            flex: 1 1 150px;
+            min-width: 120px;
         }
         .total-item .label {
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
             color: #666;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .total-item .amount {
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
             font-weight: 700;
+            line-height: 1.2;
+            word-break: break-word;
         }
         .total-item .amount.quote-total {
             color: #F28500;
         }
         
         .profit-loss {
-            font-size: 2rem;
+            font-size: clamp(1.4rem, 5vw, 2rem);
             font-weight: 700;
             padding: 10px 0;
+            word-break: break-word;
         }
         .profit { color: #0f7b3a; }
         .loss { color: #b13e3e; }
@@ -276,52 +344,66 @@
             border-radius: 40px;
             border: none;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
             cursor: pointer;
+            min-width: 44px;
+            white-space: nowrap;
         }
         .save-btn { background: #F28500; color: white; }
         .cancel-btn { background: #e0e0e0; }
 
+        /* records table */
         .records-table-wrapper {
             overflow-x: auto;
             background: white;
             border-radius: 32px;
             padding: 0.5rem;
+            box-shadow: 0 8px 20px -12px black;
         }
         .records-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 1000px;
+            font-size: 0.9rem;
         }
         .records-table th {
             background: #D6CB8D;
             padding: 14px 5px;
             position: sticky;
             top: 0;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            white-space: nowrap;
         }
         .records-table td {
             padding: 12px 5px;
             border-bottom: 1px solid #ddd;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            word-break: break-word;
         }
         .tag {
             display: inline-block;
             background: #F2850020;
-            padding: 4px 12px;
+            padding: 4px 8px;
             border-radius: 30px;
             margin: 2px;
+            font-size: clamp(0.65rem, 2.5vw, 0.8rem);
             border: 1px solid #F2850060;
+            white-space: nowrap;
         }
         .edit-btn, .delete-btn {
             border: none;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 30px;
             font-weight: 600;
             margin: 2px;
             cursor: pointer;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            white-space: nowrap;
         }
         .edit-btn { background: #D6CB8D; }
         .delete-btn { background: #f8d7da; color: #b02a37; }
 
+        /* toast */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -334,8 +416,12 @@
             border-radius: 50px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             margin-top: 10px;
+            font-weight: 500;
             border-left: 8px solid;
             animation: slide 0.2s;
+            max-width: 90vw;
+            word-break: break-word;
+            font-size: clamp(0.8rem, 3vw, 0.95rem);
         }
         .toast.success { border-color: #0f7b3a; }
         .toast.error { border-color: #b13e3e; }
@@ -343,18 +429,34 @@
         @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
         .loader {
-            border: 5px solid #f3f3f3; border-top: 5px solid #F28500; border-radius: 50%;
-            width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #F28500;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        @media (max-width: 600px) {
-            .form-row { flex-direction: column; }
+        /* Responsive for very small screens */
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            .header { flex-direction: column; text-align: center; }
+            .header-right { width: 100%; justify-content: center; }
+            .nav-btn, .logout-btn { flex: 1; }
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { flex-direction: column; gap: 12px; }
+            .form-group { min-width: 100%; }
+            .action-buttons { flex-direction: column; }
             .action-buttons button { width: 100%; }
+            .totals-row { flex-direction: column; gap: 10px; }
+            .total-item { width: 100%; }
         }
     </style>
 </head>
 <body>
+    <!-- login screen -->
     <div id="loginScreen" class="login-wrapper">
         <h2>🔐 CONSTRUCT PRO</h2>
         <input type="password" id="passwordInput" placeholder="enter password" inputmode="numeric">
@@ -362,16 +464,27 @@
         <div id="loginError" class="error-msg"></div>
     </div>
 
+    <!-- main dashboard (hidden initially) -->
     <div id="appMain" class="app-container">
         <div class="header">
             <h1>🏗️ ConstructPro</h1>
-            <div class="header-actions">
-                <a href="analytics.html" class="analytics-link">📊 Analytics</a>
+            <div class="header-right">
+                <button class="nav-btn" onclick="window.location.href='analytics.html'">📊 Analytics</button>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
         </div>
 
-        <div class="summary-grid">
+        <!-- data status banner (will be shown when needed) -->
+        <div class="data-status" id="dataStatusBanner" style="display: none;">
+            <div class="status-icon">📊</div>
+            <div class="status-text">
+                <h3 id="statusTitle">Loading data...</h3>
+                <p id="statusMessage">Please wait while we fetch your data</p>
+            </div>
+        </div>
+
+        <!-- summary cards -->
+        <div class="summary-grid" id="summaryCards">
             <div class="card"><h3>📋 Total records</h3><div class="value" id="totalRecords">0</div></div>
             <div class="card"><h3>💰 Quotations total</h3><div class="value" id="totalQuotations">₦0</div></div>
             <div class="card"><h3>💵 Payments</h3><div class="value" id="totalPayments">₦0</div></div>
@@ -379,24 +492,27 @@
             <div class="card"><h3>🟡 Pending checkups</h3><div class="value" id="pendingCheck">0</div></div>
         </div>
 
-        <div class="form-panel">
-            <h3>➕ Add / Edit Record</h3>
+        <!-- Form panel -->
+        <div class="form-panel" id="formPanel">
+            <h3 style="margin-bottom: 1rem; font-size: clamp(1rem, 4vw, 1.2rem;">➕ Add / edit record</h3>
             <div class="form-row">
-                <div class="form-group"><label>Client Name *</label><input type="text" id="clientName" placeholder="e.g. Hassan Bello"></div>
+                <div class="form-group"><label>Client name *</label><input type="text" id="clientName" placeholder="e.g. Hassan Bello"></div>
                 <div class="form-group"><label>Address *</label><input type="text" id="address" placeholder="No 3, road..."></div>
-                <div class="form-group"><label>Quotation Ref</label><input type="text" id="quotationRef" placeholder="Q-242"></div>
+                <div class="form-group"><label>Quotation ref</label><input type="text" id="quotationRef" placeholder="Q-242"></div>
             </div>
 
-            <label><strong>📦 Quotation Items</strong></label>
+            <!-- quotation items dynamic table -->
+            <label style="font-weight: 600; font-size: clamp(0.8rem, 3vw, 0.95rem);">📦 Quotation items (name, quantity, unit price)</label>
             <div class="items-table-wrapper">
-                <table class="items-table">
-                    <thead><tr><th>Item Name</th><th>Qty</th><th>Unit Price (₦)</th><th>Line Total</th><th></th></tr></thead>
+                <table class="items-table" id="itemsTable">
+                    <thead><tr><th>Item name</th><th>Qty</th><th>Unit price (₦)</th><th>Line total</th><th></th></tr></thead>
                     <tbody id="itemsBody"></tbody>
                 </table>
             </div>
-            <button class="add-item-btn" id="addItemBtn">➕ Add Item</button>
-            <div class="quotation-preview" id="quotationPreview"></div>
+            <button class="add-item-btn" id="addItemBtn">➕ Add item</button>
+            <div class="quotation-preview" id="quotationPreview">battery-4-23000, solar-6-345000</div>
 
+            <!-- Totals display section -->
             <div class="totals-row">
                 <div class="total-item">
                     <div class="label">Quotation Total</div>
@@ -407,18 +523,21 @@
                     <div class="amount" id="paymentDisplay">₦0.00</div>
                 </div>
                 <div class="total-item">
-                    <div class="label">Material Cost</div>
-                    <div class="amount" id="materialDisplay">₦0.00</div>
+                    <div class="label">Total Expenses</div>
+                    <div class="amount" id="expensesDisplay">₦0.00</div>
                 </div>
             </div>
 
             <div class="form-row">
-                <div class="form-group"><label>Payment Received (₦)</label><input type="number" id="paymentAmount" step="0.01" value="0"></div>
-                <div class="form-group"><label>Material Cost (₦)</label><input type="number" id="materialCost" step="0.01" value="0"></div>
+                <div class="form-group"><label>Payment received (₦)</label><input type="number" id="paymentAmount" step="0.01" value="0"></div>
+                <div class="form-group"><label>Material cost (₦)</label><input type="number" id="materialCost" step="0.01" value="0"></div>
+                <div class="form-group check-group">
+                    <input type="checkbox" id="checkUpNeeded">
+                    <label>Check‑up needed?</label>
+                </div>
+                <div class="form-group"><label>Check‑up date</label><input type="date" id="checkUpDate"></div>
                 <div class="form-group"><label>Transport (₦)</label><input type="number" id="transportCost" step="0.01" value="0"></div>
-                <div class="form-group"><label>Other Cost (₦)</label><input type="number" id="otherCost" step="0.01" value="0"></div>
-                <div class="form-group check-group"><label>Check-up Needed?</label><input type="checkbox" id="checkUpNeeded"></div>
-                <div class="form-group"><label>Check-up Date</label><input type="date" id="checkUpDate"></div>
+                <div class="form-group"><label>Other cost (₦)</label><input type="number" id="otherCost" step="0.01" value="0"></div>
             </div>
 
             <div class="profit-loss" id="profitDisplay">₦0.00</div>
@@ -429,31 +548,29 @@
             <input type="hidden" id="editId" value="">
         </div>
 
+        <!-- records table -->
         <div class="records-table-wrapper">
-            <table class="records-table">
-                <thead>
-                    <tr>
-                        <th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th>
-                        <th>Quote Total</th><th>Payment</th><th>Material</th><th>Transport</th>
-                        <th>Other</th><th>Expenses</th><th>Profit</th><th>Check-up</th><th>Date</th><th>Actions</th>
-                    </tr>
-                </thead>
+            <table class="records-table" id="recordsTable">
+                <thead><tr><th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th><th>Quote</th><th>Payment</th><th>Material</th><th>Check</th><th>Date</th><th>Transport</th><th>Other</th><th>Expenses</th><th>Profit</th><th>Actions</th></tr></thead>
                 <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
 
+    <!-- toast container -->
     <div id="toastContainer" class="toast-container"></div>
 
     <script>
         (function() {
-            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec';
-            const PASSWORD = '1001';
-            
+            // ---------- CONFIG ----------
+            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
+
+            // ---------- Global state ----------
             let records = [];
             let editId = null;
             let items = [{ name: '', quantity: 1, unitPrice: 0 }];
 
+            // ---------- helpers ----------
             const toast = (msg, type = 'info') => {
                 const container = document.getElementById('toastContainer');
                 const el = document.createElement('div');
@@ -479,41 +596,44 @@
                 loader.style.display = show ? 'block' : 'none';
             };
 
-            const formatMoney = (val) => '₦' + Number(val).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            const formatMoney = (val) => {
+                const num = Number(val) || 0;
+                return '₦' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            };
 
             const parseItemsFromString = (str) => {
-                if (!str) return [{ name: '', quantity: 1, unitPrice: 0 }];
-                return str.split(',').map(s => {
-                    const parts = s.trim().split('-');
-                    return { 
-                        name: parts[0] || '', 
-                        quantity: parseFloat(parts[1]) || 1, 
-                        unitPrice: parseFloat(parts[2]) || 0 
-                    };
-                }).filter(i => i.name);
+                if (!str || str === 'null' || str === 'undefined') return [{ name: '', quantity: 1, unitPrice: 0 }];
+                try {
+                    const parsed = str.split(',').map(s => {
+                        const parts = s.trim().split('-');
+                        return { name: parts[0] || '', quantity: parseFloat(parts[1]) || 1, unitPrice: parseFloat(parts[2]) || 0 };
+                    }).filter(i => i.name);
+                    return parsed.length ? parsed : [{ name: '', quantity: 1, unitPrice: 0 }];
+                } catch (e) {
+                    return [{ name: '', quantity: 1, unitPrice: 0 }];
+                }
             };
 
             const stringifyItems = (itemsArr) => {
-                return itemsArr.filter(i => i.name.trim() !== '')
-                    .map(i => `${i.name.trim()}-${i.quantity || 1}-${i.unitPrice || 0}`)
-                    .join(',');
+                return itemsArr.filter(i => i.name && i.name.trim() !== '').map(i => `${i.name.trim()}-${i.quantity || 1}-${i.unitPrice || 0}`).join(',');
             };
 
             const lineTotal = (item) => (item.quantity || 0) * (item.unitPrice || 0);
 
-            function calculateQuoteTotal() {
+            const calculateQuoteTotal = () => {
                 return items.reduce((acc, i) => acc + lineTotal(i), 0);
-            }
+            };
 
             function renderItemsTable() {
                 const tbody = document.getElementById('itemsBody');
+                if (!tbody) return;
                 let html = '';
                 items.forEach((item, idx) => {
                     const total = lineTotal(item);
                     html += `<tr>
-                        <td><input type="text" value="${item.name.replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
-                        <td><input type="number" value="${item.quantity}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
-                        <td><input type="number" value="${item.unitPrice}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
+                        <td><input type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
+                        <td><input type="number" value="${item.quantity || 1}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
+                        <td><input type="number" value="${item.unitPrice || 0}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
                         <td>${formatMoney(total)}</td>
                         <td><button class="remove-item-btn" data-index="${idx}">✖</button></td>
                     </tr>`;
@@ -532,7 +652,7 @@
                             const totalCell = row.cells[3];
                             if (totalCell) totalCell.innerText = formatMoney(lineTotal(items[idx]));
                         }
-                        updateTotals();
+                        updateQuotationPreviewAndTotals();
                     });
                 });
 
@@ -545,28 +665,31 @@
                             items[0] = { name: '', quantity: 1, unitPrice: 0 };
                         }
                         renderItemsTable();
-                        updateTotals();
+                        updateQuotationPreviewAndTotals();
                     });
                 });
             }
 
-            function updateTotals() {
-                const validItems = items.filter(i => i.name.trim() !== '');
+            function updateQuotationPreviewAndTotals() {
+                const previewEl = document.getElementById('quotationPreview');
+                const validItems = items.filter(i => i.name && i.name.trim() !== '');
+                previewEl.innerText = validItems.length ? stringifyItems(validItems) : '(empty)';
+
                 const quoteTotal = validItems.reduce((acc, i) => acc + lineTotal(i), 0);
+                
+                document.getElementById('quotationTotalDisplay').innerText = formatMoney(quoteTotal);
+                
                 const payment = parseFloat(document.getElementById('paymentAmount').value) || 0;
                 const material = parseFloat(document.getElementById('materialCost').value) || 0;
                 const transport = parseFloat(document.getElementById('transportCost').value) || 0;
                 const other = parseFloat(document.getElementById('otherCost').value) || 0;
-
-                document.getElementById('quotationPreview').innerText = validItems.length ? stringifyItems(validItems) : '(empty)';
-                document.getElementById('quotationTotalDisplay').innerText = formatMoney(quoteTotal);
+                
                 document.getElementById('paymentDisplay').innerText = formatMoney(payment);
                 
                 const totalExpenses = material + transport + other;
-                document.getElementById('materialDisplay').innerText = formatMoney(totalExpenses);
+                document.getElementById('expensesDisplay').innerText = formatMoney(totalExpenses);
                 
-                // PROFIT = PAYMENT - QUOTATION TOTAL
-                const profit = payment - quoteTotal;
+                const profit = payment - totalExpenses;
                 const profitEl = document.getElementById('profitDisplay');
                 profitEl.innerText = formatMoney(profit);
                 profitEl.className = 'profit-loss ' + (profit >= 0 ? 'profit' : 'loss');
@@ -585,7 +708,7 @@
                 document.getElementById('editId').value = '';
                 items = [{ name: '', quantity: 1, unitPrice: 0 }];
                 renderItemsTable();
-                updateTotals();
+                updateQuotationPreviewAndTotals();
                 editId = null;
             }
 
@@ -601,107 +724,149 @@
                 document.getElementById('checkUpDate').value = rec.date || '';
                 document.getElementById('editId').value = rec.id;
                 items = parseItemsFromString(rec.quotation_details || '');
-                if (items.length === 0) items = [{ name: '', quantity: 1, unitPrice: 0 }];
                 renderItemsTable();
-                updateTotals();
+                updateQuotationPreviewAndTotals();
                 editId = rec.id;
             }
 
             async function fetchRecords() {
                 showLoader(true);
+                
+                // Show status banner
+                const banner = document.getElementById('dataStatusBanner');
+                banner.style.display = 'flex';
+                document.getElementById('statusTitle').innerText = 'Loading data...';
+                document.getElementById('statusMessage').innerText = 'Connecting to Google Sheets...';
+                
                 try {
                     const res = await fetch(`${API_URL}?action=getAll`);
                     const data = await res.json();
-                    records = data.records || [];
                     
-                    const tbody = document.getElementById('tableBody');
-                    let html = '';
-                    let totalQuot = 0, totalPay = 0, totalProf = 0, pending = 0;
-                    
-                    records.forEach(r => {
-                        const itemsArr = parseItemsFromString(r.quotation_details);
-                        const tags = itemsArr.map(i => `<span class="tag">${i.name}-${i.quantity}</span>`).join(' ');
+                    if (data.records && Array.isArray(data.records)) {
+                        records = data.records.map(record => ({
+                            ...record,
+                            profit: parseFloat(record.profit) || 0,
+                            payment_amount: parseFloat(record.payment_amount) || 0,
+                            quotation_total: parseFloat(record.quotation_total) || 0,
+                            material_cost: parseFloat(record.material_cost) || 0,
+                            transport_cost: parseFloat(record.transport_cost) || 0,
+                            other_cost: parseFloat(record.other_cost) || 0
+                        }));
                         
-                        // Force correct profit calculation
-                        const payment = parseFloat(r.payment_amount) || 0;
-                        const quoteTotal = parseFloat(r.quotation_total) || 0;
-                        const profit = payment - quoteTotal;
+                        banner.style.borderLeftColor = '#0f7b3a';
+                        document.getElementById('statusTitle').innerText = '✅ Data Loaded';
+                        document.getElementById('statusMessage').innerText = `Found ${records.length} records`;
                         
-                        totalQuot += quoteTotal;
-                        totalPay += payment;
-                        totalProf += profit;
-                        if (r.check_up === 'Yes') pending++;
-                        
-                        html += `<tr>
-                            <td>${r.id}</td><td>${r.client_name}</td><td>${r.address}</td><td>${r.quotation_ref || ''}</td>
-                            <td>${tags}</td><td>${formatMoney(quoteTotal)}</td><td>${formatMoney(payment)}</td>
-                            <td>${formatMoney(r.material_cost)}</td><td>${formatMoney(r.transport_cost)}</td>
-                            <td>${formatMoney(r.other_cost)}</td><td>${formatMoney((parseFloat(r.material_cost)||0)+(parseFloat(r.transport_cost)||0)+(parseFloat(r.other_cost)||0))}</td>
-                            <td class="${profit>=0?'profit':'loss'}">${formatMoney(profit)}</td>
-                            <td>${r.check_up}</td><td>${r.date || ''}</td>
-                            <td><button class="edit-btn" data-id="${r.id}">Edit</button> <button class="delete-btn" data-id="${r.id}">Del</button></td>
-                        </tr>`;
-                    });
+                        toast(`Loaded ${records.length} records`, 'success');
+                    } else {
+                        records = [];
+                        banner.style.borderLeftColor = '#F28500';
+                        document.getElementById('statusTitle').innerText = 'ℹ️ No Data';
+                        document.getElementById('statusMessage').innerText = 'No records found in sheet';
+                    }
                     
-                    tbody.innerHTML = html;
-                    document.getElementById('totalRecords').innerText = records.length;
-                    document.getElementById('totalQuotations').innerText = formatMoney(totalQuot);
-                    document.getElementById('totalPayments').innerText = formatMoney(totalPay);
-                    document.getElementById('totalProfit').innerText = formatMoney(totalProf);
-                    document.getElementById('pendingCheck').innerText = pending;
-
-                    document.querySelectorAll('.edit-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            const id = e.target.dataset.id;
-                            const rec = records.find(r => r.id == id);
-                            if (rec) loadRecordForEdit(rec);
-                        });
-                    });
+                    renderTableAndSummaries();
                     
-                    document.querySelectorAll('.delete-btn').forEach(btn => {
-                        btn.addEventListener('click', async (e) => {
-                            if (!confirm('Delete record?')) return;
-                            const id = e.target.dataset.id;
-                            showLoader(true);
-                            try {
-                                await fetch(API_URL, { 
-                                    method: 'POST', 
-                                    body: JSON.stringify({ action: 'delete', id: id }) 
-                                });
-                                toast('Deleted', 'success');
-                                fetchRecords();
-                            } catch { 
-                                toast('Error', 'error'); 
-                            } finally { 
-                                showLoader(false); 
-                            }
-                        });
-                    });
+                    // Hide banner after 3 seconds
+                    setTimeout(() => {
+                        banner.style.display = 'none';
+                    }, 3000);
                     
                 } catch (e) {
+                    console.error('Fetch error:', e);
+                    records = [];
+                    banner.style.borderLeftColor = '#b13e3e';
+                    document.getElementById('statusTitle').innerText = '⚠️ Connection Error';
+                    document.getElementById('statusMessage').innerText = 'Could not connect to Google Sheets. Check API URL.';
                     toast('Failed to load data', 'error');
                 } finally {
                     showLoader(false);
                 }
             }
 
+            function renderTableAndSummaries() {
+                const tbody = document.getElementById('tableBody');
+                let html = '';
+                let totalQuot = 0, totalPay = 0, totalProf = 0, pending = 0;
+                
+                records.forEach(r => {
+                    const itemsArr = parseItemsFromString(r.quotation_details);
+                    const tags = itemsArr.filter(i => i.name).map(i => 
+                        `<span class="tag">${i.name}-${i.quantity}-₦${i.unitPrice}</span>`
+                    ).join(' ');
+                    
+                    const profitVal = parseFloat(r.profit) || 0;
+                    totalQuot += parseFloat(r.quotation_total) || 0;
+                    totalPay += parseFloat(r.payment_amount) || 0;
+                    totalProf += profitVal;
+                    if (r.check_up === 'Yes') pending++;
+                    
+                    html += `<tr>
+                        <td>${r.id || ''}</td>
+                        <td>${r.client_name || ''}</td>
+                        <td>${r.address || ''}</td>
+                        <td>${r.quotation_ref || ''}</td>
+                        <td>${tags}</td>
+                        <td>${formatMoney(r.quotation_total)}</td>
+                        <td>${formatMoney(r.payment_amount)}</td>
+                        <td>${formatMoney(r.material_cost)}</td>
+                        <td>${r.check_up || 'No'}</td>
+                        <td>${r.date || ''}</td>
+                        <td>${formatMoney(r.transport_cost)}</td>
+                        <td>${formatMoney(r.other_cost)}</td>
+                        <td>${formatMoney(r.total_expenses)}</td>
+                        <td class="${profitVal >= 0 ? 'profit' : 'loss'}">${formatMoney(profitVal)}</td>
+                        <td>
+                            <button class="edit-btn" data-id="${r.id}">Edit</button>
+                            <button class="delete-btn" data-id="${r.id}">Del</button>
+                        </td>
+                    </tr>`;
+                });
+                
+                tbody.innerHTML = html || '<tr><td colspan="15" class="no-data">No records found</td></tr>';
+                
+                document.getElementById('totalRecords').innerText = records.length;
+                document.getElementById('totalQuotations').innerText = formatMoney(totalQuot);
+                document.getElementById('totalPayments').innerText = formatMoney(totalPay);
+                document.getElementById('totalProfit').innerText = formatMoney(totalProf);
+                document.getElementById('pendingCheck').innerText = pending;
+
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.dataset.id;
+                        const rec = records.find(r => r.id == id);
+                        if (rec) loadRecordForEdit(rec);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        if (!confirm('Delete record?')) return;
+                        const id = e.target.dataset.id;
+                        showLoader(true);
+                        try {
+                            await fetch(API_URL, { 
+                                method: 'POST', 
+                                body: JSON.stringify({ action: 'delete', id: id }) 
+                            });
+                            toast('Deleted', 'success');
+                            fetchRecords();
+                        } catch { 
+                            toast('Error', 'error'); 
+                        } finally { 
+                            showLoader(false); 
+                        }
+                    });
+                });
+            }
+
             async function saveRecord() {
                 const client = document.getElementById('clientName').value.trim();
                 const address = document.getElementById('address').value.trim();
+                
                 if (!client || !address) { 
                     toast('Client and address required', 'error'); 
                     return; 
-                }
-                
-                const validItems = items.filter(i => i.name.trim() !== '');
-                const quoteTotal = validItems.reduce((acc, i) => acc + lineTotal(i), 0);
-                const payment = parseFloat(document.getElementById('paymentAmount').value) || 0;
-                const profit = payment - quoteTotal;
-                
-                if (payment < quoteTotal) {
-                    if (!confirm(`Warning: Payment (${formatMoney(payment)}) is less than Quotation Total (${formatMoney(quoteTotal)}). Loss will be ${formatMoney(profit)}. Continue?`)) {
-                        return;
-                    }
                 }
                 
                 const payload = {
@@ -711,7 +876,7 @@
                     address: address,
                     quotation_ref: document.getElementById('quotationRef').value,
                     quotation_details: stringifyItems(items),
-                    payment_amount: payment,
+                    payment_amount: parseFloat(document.getElementById('paymentAmount').value) || 0,
                     material_cost: parseFloat(document.getElementById('materialCost').value) || 0,
                     transport_cost: parseFloat(document.getElementById('transportCost').value) || 0,
                     other_cost: parseFloat(document.getElementById('otherCost').value) || 0,
@@ -721,18 +886,13 @@
                 
                 showLoader(true);
                 try {
-                    const res = await fetch(API_URL, { 
+                    await fetch(API_URL, { 
                         method: 'POST', 
                         body: JSON.stringify(payload) 
                     });
-                    const data = await res.json();
-                    if (data.success) {
-                        toast('Saved', 'success');
-                        resetForm();
-                        fetchRecords();
-                    } else {
-                        toast('Save failed', 'error');
-                    }
+                    toast('Saved successfully', 'success');
+                    resetForm();
+                    fetchRecords();
                 } catch (e) { 
                     toast('Save failed', 'error'); 
                 } finally { 
@@ -740,7 +900,8 @@
                 }
             }
 
-            // Login
+            // Login logic
+            const PASSWORD = '1001';
             if (sessionStorage.getItem('auth') === 'true') {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appMain').style.display = 'flex';
@@ -764,20 +925,30 @@
                 location.reload();
             });
 
+            // Event listeners
             document.getElementById('addItemBtn').addEventListener('click', () => {
                 items.push({ name: '', quantity: 1, unitPrice: 0 });
                 renderItemsTable();
-                updateTotals();
+                updateQuotationPreviewAndTotals();
             });
 
-            ['paymentAmount', 'materialCost', 'transportCost', 'otherCost'].forEach(id => {
-                document.getElementById(id).addEventListener('input', updateTotals);
+            ['paymentAmount','materialCost','transportCost','otherCost'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateQuotationPreviewAndTotals);
             });
 
             document.getElementById('saveRecordBtn').addEventListener('click', saveRecord);
             document.getElementById('cancelFormBtn').addEventListener('click', resetForm);
 
+            // Initial render
             resetForm();
+
+            // Device log
+            if (sessionStorage.getItem('auth') === 'true') {
+                navigator.userAgent && fetch(API_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: 'log', device: navigator.userAgent }) 
+                }).catch(() => {});
+            }
         })();
     </script>
 </body>
