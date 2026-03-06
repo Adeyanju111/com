@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     
-    <!-- PWA Meta Tags - CRITICAL for full-screen app experience -->
+    <!-- CRITICAL PWA Meta Tags - These force full-screen mode -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ConstructPro Analytics">
@@ -12,17 +12,28 @@
     <meta name="theme-color" content="#F28500">
     <meta name="description" content="Construction Company Analytics">
     
-    <!-- PWA Icons for iOS -->
+    <!-- Additional iOS specific meta -->
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- PWA Icons -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
     
-    <!-- PWA Icons for Android -->
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
-    <link rel="icon" type="image/png" sizes="512x512" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
-    
-    <!-- Startup splash screen for iOS -->
-    <link rel="apple-touch-startup-image" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 667'%3E%3Crect width='375' height='667' fill='%23F28500'/%3E%3Ctext x='187.5' y='350' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3Ctext x='187.5' y='420' font-size='20' text-anchor='middle' fill='white' font-family='Arial'%3EAnalytics%3C/text%3E%3C/svg%3E">
+    <!-- Manifest for Android -->
+    <link rel="manifest" href="data:application/manifest+json,{
+        &quot;name&quot;: &quot;ConstructPro Analytics&quot;,
+        &quot;short_name&quot;: &quot;Analytics&quot;,
+        &quot;start_url&quot;: &quot;.&quot;,
+        &quot;display&quot;: &quot;standalone&quot;,
+        &quot;background_color&quot;: &quot;#F28500&quot;,
+        &quot;theme_color&quot;: &quot;#F28500&quot;,
+        &quot;icons&quot;: [{
+            &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E&quot;,
+            &quot;sizes&quot;: &quot;192x192&quot;,
+            &quot;type&quot;: &quot;image/svg+xml&quot;
+        }]
+    }">
     
     <title>ConstructPro · Analytics Dashboard</title>
     <style>
@@ -40,7 +51,7 @@
             padding: 20px;
         }
         
-        /* CRITICAL: Hide browser UI in standalone mode */
+        /* CRITICAL: Full-screen mode styles */
         @media all and (display-mode: standalone) {
             body {
                 padding-top: env(safe-area-inset-top);
@@ -53,9 +64,10 @@
             /* Remove any browser-like decorations */
             .dashboard-container {
                 width: 100%;
-                height: 100%;
+                height: 100vh;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
+                padding-bottom: env(safe-area-inset-bottom);
             }
             
             /* Add drag handle for iOS */
@@ -68,17 +80,78 @@
                 -webkit-app-region: no-drag;
             }
             
-            /* Ensure full-screen feel */
+            /* Hide any browser UI */
             html, body {
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
             }
             
-            .dashboard-container {
-                height: 100vh;
-                height: -webkit-fill-available;
-                overflow-y: auto;
+            /* Custom scrollbar for app feel */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #F28500;
+                border-radius: 10px;
+            }
+        }
+        
+        /* Install guide banner - only shows in browser mode */
+        .install-guide {
+            background: linear-gradient(135deg, #F28500, #D6CB8D);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 32px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
+        }
+        
+        .install-guide-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .install-guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .step {
+            flex: 1 1 200px;
+            background: rgba(255,255,255,0.2);
+            padding: 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: white;
+            color: #F28500;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+        
+        .install-guide.hidden {
+            display: none;
+        }
+        
+        @media all and (display-mode: standalone) {
+            .install-guide {
+                display: none !important;
             }
         }
         
@@ -575,31 +648,6 @@
             .checkups-grid { grid-template-columns: 1fr; }
         }
         
-        /* PWA standalone mode adjustments */
-        @media all and (display-mode: standalone) {
-            .install-prompt {
-                display: none !important;
-            }
-            
-            /* Ensure full-screen feel */
-            .dashboard-container {
-                height: 100vh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-            
-            /* Hide any browser-like scrollbars */
-            ::-webkit-scrollbar {
-                width: 6px;
-            }
-            
-            ::-webkit-scrollbar-thumb {
-                background: #F28500;
-                border-radius: 10px;
-            }
-        }
-        
         canvas {
             max-width: 100%;
             height: auto !important;
@@ -608,17 +656,29 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <!-- Install Prompt (only shows in browser, not in standalone mode) -->
-    <div id="installPrompt" class="install-prompt" style="display: none;">
-        <div class="install-text">
-            <span class="install-icon">📱</span>
-            <div>
-                <div class="install-title">Install Analytics Dashboard</div>
-                <div class="install-subtitle">Add to home screen for app-like experience</div>
+    <!-- Install Guide - Shows when in browser mode -->
+    <div id="installGuide" class="install-guide">
+        <div class="install-guide-title">
+            <span>📱</span> Install as App for Full-Screen Experience
+        </div>
+        <div class="install-guide-steps">
+            <div class="step">
+                <span class="step-number">1</span> Tap Share 
+                <span style="font-size: 1.2rem;">⬆️</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span> Scroll down
+            </div>
+            <div class="step">
+                <span class="step-number">3</span> Tap "Add to Home Screen"
+            </div>
+            <div class="step">
+                <span class="step-number">4</span> Tap "Add"
             </div>
         </div>
-        <button class="install-btn" id="installBtn">Install</button>
-        <button class="close-install" id="closeInstall">✕</button>
+        <div style="font-size: 0.9rem; opacity: 0.9;">
+            Then open from home screen - no browser UI!
+        </div>
     </div>
 
     <!-- login screen -->
@@ -692,7 +752,7 @@
             </div>
         </div>
 
-        <!-- UPCOMING CHECK-UPS SECTION - NEW -->
+        <!-- UPCOMING CHECK-UPS SECTION -->
         <div class="checkups-section" id="checkupsSection">
             <div class="checkups-header">
                 <div class="checkups-title">
@@ -778,76 +838,41 @@
             const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
             const PASSWORD = '1001';
             
-            // ---------- PWA Installation ----------
-            let deferredPrompt;
-            const installPrompt = document.getElementById('installPrompt');
-            const installBtn = document.getElementById('installBtn');
-            const closeInstall = document.getElementById('closeInstall');
-
-            // Check if already in standalone mode
-            if (window.matchMedia('(display-mode: standalone)').matches || 
-                window.navigator.standalone === true) {
-                console.log('App is running in standalone mode');
-                // Hide install prompt immediately if in standalone mode
-                installPrompt.style.display = 'none';
-            } else {
-                // Show install prompt after 3 seconds (only in browser)
-                setTimeout(() => {
-                    installPrompt.style.display = 'flex';
-                }, 3000);
-            }
-
-            // Listen for beforeinstallprompt event
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                // Only show if not in standalone mode
-                if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
-                    installPrompt.style.display = 'flex';
-                }
-            });
-
-            installBtn.addEventListener('click', async () => {
-                if (!deferredPrompt) {
-                    // Manual instructions for iOS
-                    alert('To install: Tap Share button → "Add to Home Screen"');
-                    return;
-                }
-                
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installPrompt.style.display = 'none';
-            });
-
-            closeInstall.addEventListener('click', () => {
-                installPrompt.style.display = 'none';
-            });
-
-            // Handle iOS standalone detection
-            if (window.navigator.standalone === true) {
-                document.body.classList.add('ios-standalone');
-            }
-
-            // Safe area handling for notched phones
-            document.documentElement.style.setProperty('--sat', 'env(safe-area-inset-top)');
-            document.documentElement.style.setProperty('--sab', 'env(safe-area-inset-bottom)');
+            // ---------- PWA Detection and Guide ----------
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                window.navigator.standalone === true;
             
-            // Force standalone display mode detection
-            (function() {
-                if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-                    document.documentElement.classList.add('pwa-mode');
-                    // Add meta tag to ensure full-screen
-                    let meta = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
-                    if (!meta) {
-                        meta = document.createElement('meta');
-                        meta.name = 'apple-mobile-web-app-capable';
-                        meta.content = 'yes';
-                        document.head.appendChild(meta);
-                    }
+            const installGuide = document.getElementById('installGuide');
+            
+            if (isStandalone) {
+                // In app mode - hide guide
+                installGuide.style.display = 'none';
+                document.body.classList.add('pwa-mode');
+            } else {
+                // In browser - show guide
+                installGuide.style.display = 'block';
+                
+                // Check if it's file protocol (local file)
+                if (window.location.protocol === 'file:') {
+                    const guideHtml = installGuide.innerHTML;
+                    installGuide.innerHTML = `
+                        <div class="install-guide-title" style="color: #ffebee;">
+                            ⚠️ Running from local files
+                        </div>
+                        <div style="margin: 10px 0;">
+                            For true app experience:
+                            <br>1. Upload to a web server OR
+                            <br>2. Add to Home Screen (will still work)
+                        </div>
+                        ${guideHtml}
+                    `;
                 }
-            })();
+            }
+            
+            // Force standalone detection on iOS
+            if (window.navigator.standalone) {
+                document.documentElement.classList.add('ios-pwa');
+            }
             
             // ---------- Global state ----------
             let allRecords = [];
@@ -855,23 +880,11 @@
             let charts = {};
             
             // ---------- Navigation ----------
-            // Check if we're in a file:// context or web server
-            const isFileProtocol = window.location.protocol === 'file:';
-            
-            // Handle back to main button
             document.getElementById('backToMainBtn').addEventListener('click', () => {
-                if (isFileProtocol) {
-                    // If using file protocol, try both possible filenames
-                    if (window.location.href.includes('analytics')) {
-                        // Try to go to index.html in same directory
-                        const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-                        window.location.href = currentPath + 'index.html';
-                    } else {
-                        // Fallback
-                        window.location.href = 'index.html';
-                    }
+                if (window.location.protocol === 'file:') {
+                    const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+                    window.location.href = currentPath + 'index.html';
                 } else {
-                    // If on web server, use relative path
                     window.location.href = 'index.html';
                 }
             });
@@ -943,7 +956,7 @@
                 document.getElementById('dataSummary').innerText = `${allRecords.length} total records`;
             }
 
-            // NEW: Update upcoming check-ups
+            // Update upcoming check-ups
             function updateUpcomingCheckups() {
                 const filterDays = parseInt(document.getElementById('checkupsFilter').value) || 30;
                 const today = new Date();
@@ -1463,7 +1476,6 @@
                 filterRecordsByDate();
             });
 
-            // Add checkups filter listener
             document.getElementById('checkupsFilter').addEventListener('change', updateUpcomingCheckups);
 
             // device log
