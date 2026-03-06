@@ -3,6 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ConstructPro">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F28500">
+    <meta name="description" content="Construction Company Management">
+    
+    <!-- PWA Icons for iOS -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    
+    <!-- PWA Icons for Android -->
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="512x512" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Startup splash screen for iOS -->
+    <link rel="apple-touch-startup-image" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 667'%3E%3Crect width='375' height='667' fill='%23F28500'/%3E%3Ctext x='187.5' y='350' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3Ctext x='187.5' y='420' font-size='20' text-anchor='middle' fill='white' font-family='Arial'%3EConstructPro%3C/text%3E%3C/svg%3E">
+    
     <title>ConstructPro · Dashboard</title>
     <style>
         * {
@@ -11,14 +32,37 @@
             padding: 0;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
+        
+        /* PWA specific styles */
         body {
             background: #f5f5f5;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 12px;
         }
+        
+        /* Hide browser UI in standalone mode */
+        @media all and (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+            
+            /* Add drag handle for iOS */
+            .header {
+                -webkit-app-region: drag;
+            }
+            
+            .header button {
+                -webkit-app-region: no-drag;
+            }
+        }
+        
         /* login container */
         .login-wrapper {
             width: 100%;
@@ -81,6 +125,7 @@
         .header {
             background: white;
             padding: 1rem 1.2rem;
+            padding-top: max(1rem, env(safe-area-inset-top));
             border-radius: 40px;
             display: flex;
             flex-wrap: wrap;
@@ -124,6 +169,54 @@
             min-height: 44px;
             min-width: 44px;
             white-space: nowrap;
+        }
+        
+        /* Install prompt banner */
+        .install-prompt {
+            background: linear-gradient(135deg, #F28500, #D6CB8D);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
+        }
+        .install-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .install-icon {
+            font-size: 2rem;
+        }
+        .install-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .install-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .install-btn {
+            background: white;
+            color: #F28500;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .close-install {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
         }
         
         /* data status banner */
@@ -453,9 +546,29 @@
             .totals-row { flex-direction: column; gap: 10px; }
             .total-item { width: 100%; }
         }
+        
+        /* PWA standalone mode adjustments */
+        @media all and (display-mode: standalone) {
+            .install-prompt {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Install Prompt (only shows in browser, not in standalone mode) -->
+    <div id="installPrompt" class="install-prompt" style="display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 1000;">
+        <div class="install-text">
+            <span class="install-icon">📱</span>
+            <div>
+                <div class="install-title">Install ConstructPro</div>
+                <div class="install-subtitle">Add to home screen for app-like experience</div>
+            </div>
+        </div>
+        <button class="install-btn" id="installBtn">Install</button>
+        <button class="close-install" id="closeInstall">✕</button>
+    </div>
+
     <!-- login screen -->
     <div id="loginScreen" class="login-wrapper">
         <h2>🔐 CONSTRUCT PRO</h2>
@@ -474,7 +587,7 @@
             </div>
         </div>
 
-        <!-- data status banner (will be shown when needed) -->
+        <!-- data status banner -->
         <div class="data-status" id="dataStatusBanner" style="display: none;">
             <div class="status-icon">📊</div>
             <div class="status-text">
@@ -494,7 +607,7 @@
 
         <!-- Form panel -->
         <div class="form-panel" id="formPanel">
-            <h3 style="margin-bottom: 1rem; font-size: clamp(1rem, 4vw, 1.2rem;">➕ Add / edit record</h3>
+            <h3 style="margin-bottom: 1rem; font-size: clamp(1rem, 4vw, 1.2rem);">➕ Add / edit record</h3>
             <div class="form-row">
                 <div class="form-group"><label>Client name *</label><input type="text" id="clientName" placeholder="e.g. Hassan Bello"></div>
                 <div class="form-group"><label>Address *</label><input type="text" id="address" placeholder="No 3, road..."></div>
@@ -564,6 +677,57 @@
         (function() {
             // ---------- CONFIG ----------
             const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
+
+            // ---------- PWA Installation ----------
+            let deferredPrompt;
+            const installPrompt = document.getElementById('installPrompt');
+            const installBtn = document.getElementById('installBtn');
+            const closeInstall = document.getElementById('closeInstall');
+
+            // Check if already in standalone mode
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                console.log('App is running in standalone mode');
+            } else {
+                // Show install prompt after 3 seconds
+                setTimeout(() => {
+                    installPrompt.style.display = 'flex';
+                }, 3000);
+            }
+
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installPrompt.style.display = 'flex';
+            });
+
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) {
+                    // Manual instructions for iOS
+                    alert('To install: Tap Share button → "Add to Home Screen"');
+                    return;
+                }
+                
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installPrompt.style.display = 'none';
+            });
+
+            closeInstall.addEventListener('click', () => {
+                installPrompt.style.display = 'none';
+            });
+
+            // Handle iOS standalone detection
+            if (window.navigator.standalone === true) {
+                document.body.classList.add('ios-standalone');
+            }
+
+            // Safe area handling for notched phones
+            document.documentElement.style.setProperty('--sat', 'env(safe-area-inset-top)');
+            document.documentElement.style.setProperty('--sab', 'env(safe-area-inset-bottom)');
 
             // ---------- Global state ----------
             let records = [];
@@ -823,7 +987,7 @@
                     </tr>`;
                 });
                 
-                tbody.innerHTML = html || '<tr><td colspan="15" class="no-data">No records found</td></tr>';
+                tbody.innerHTML = html || '<tr><td colspan="15" style="text-align: center; padding: 2rem; color: #999;">No records found</td></tr>';
                 
                 document.getElementById('totalRecords').innerText = records.length;
                 document.getElementById('totalQuotations').innerText = formatMoney(totalQuot);
