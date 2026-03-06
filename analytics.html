@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     
-    <!-- PWA Meta Tags -->
+    <!-- PWA Meta Tags - CRITICAL for full-screen app experience -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ConstructPro Analytics">
@@ -40,22 +40,45 @@
             padding: 20px;
         }
         
-        /* Hide browser UI in standalone mode */
+        /* CRITICAL: Hide browser UI in standalone mode */
         @media all and (display-mode: standalone) {
             body {
                 padding-top: env(safe-area-inset-top);
                 padding-bottom: env(safe-area-inset-bottom);
                 padding-left: env(safe-area-inset-left);
                 padding-right: env(safe-area-inset-right);
+                background-color: #f5f5f5;
+            }
+            
+            /* Remove any browser-like decorations */
+            .dashboard-container {
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             /* Add drag handle for iOS */
             .header {
                 -webkit-app-region: drag;
+                padding-top: max(1rem, env(safe-area-inset-top));
             }
             
             .header button {
                 -webkit-app-region: no-drag;
+            }
+            
+            /* Ensure full-screen feel */
+            html, body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            
+            .dashboard-container {
+                height: 100vh;
+                height: -webkit-fill-available;
+                overflow-y: auto;
             }
         }
         
@@ -164,7 +187,6 @@
         .header {
             background: white;
             padding: 1rem 1.5rem;
-            padding-top: max(1rem, env(safe-area-inset-top));
             border-radius: 40px;
             display: flex;
             flex-wrap: wrap;
@@ -330,6 +352,98 @@
             word-break: break-word;
         }
         
+        /* upcoming check-ups section */
+        .checkups-section {
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 18px -8px #00000020;
+            border-left: 8px solid #F28500;
+        }
+        .checkups-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkups-title {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkups-count {
+            background: #F28500;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+        .checkups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .checkup-card {
+            background: #f8f9fa;
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s;
+        }
+        .checkup-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .checkup-client {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #F28500;
+            margin-bottom: 5px;
+        }
+        .checkup-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .checkup-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .checkup-date {
+            display: inline-block;
+            background: #F2850010;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #F28500;
+            font-weight: 600;
+        }
+        .checkup-urgent {
+            background: #ffebee;
+            color: #c62828;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .no-checkups {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-style: italic;
+        }
+        
         /* charts grid */
         .charts-grid {
             display: grid;
@@ -458,6 +572,7 @@
             .kpi-grid { grid-template-columns: repeat(2, 1fr); }
             .kpi-card { padding: 1rem 0.8rem; }
             .kpi-value { font-size: 1.2rem; }
+            .checkups-grid { grid-template-columns: 1fr; }
         }
         
         /* PWA standalone mode adjustments */
@@ -466,8 +581,22 @@
                 display: none !important;
             }
             
+            /* Ensure full-screen feel */
             .dashboard-container {
-                padding-top: 0;
+                height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            
+            /* Hide any browser-like scrollbars */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #F28500;
+                border-radius: 10px;
             }
         }
         
@@ -563,6 +692,29 @@
             </div>
         </div>
 
+        <!-- UPCOMING CHECK-UPS SECTION - NEW -->
+        <div class="checkups-section" id="checkupsSection">
+            <div class="checkups-header">
+                <div class="checkups-title">
+                    <span>🔧 Upcoming Check-ups</span>
+                    <span class="checkups-count" id="upcomingCheckupsCount">0</span>
+                </div>
+                <div class="checkups-filter">
+                    <select id="checkupsFilter" style="padding: 8px 16px; border-radius: 30px; border: 1px solid #ddd;">
+                        <option value="7">Next 7 days</option>
+                        <option value="14">Next 14 days</option>
+                        <option value="30" selected>Next 30 days</option>
+                        <option value="90">Next 90 days</option>
+                        <option value="all">All upcoming</option>
+                    </select>
+                </div>
+            </div>
+            <div id="checkupsContainer" class="checkups-grid">
+                <!-- Check-ups will be dynamically inserted here -->
+                <div class="no-checkups">No upcoming check-ups scheduled</div>
+            </div>
+        </div>
+
         <!-- charts -->
         <div class="charts-grid">
             <div class="chart-card">
@@ -636,8 +788,10 @@
             if (window.matchMedia('(display-mode: standalone)').matches || 
                 window.navigator.standalone === true) {
                 console.log('App is running in standalone mode');
+                // Hide install prompt immediately if in standalone mode
+                installPrompt.style.display = 'none';
             } else {
-                // Show install prompt after 3 seconds
+                // Show install prompt after 3 seconds (only in browser)
                 setTimeout(() => {
                     installPrompt.style.display = 'flex';
                 }, 3000);
@@ -647,7 +801,10 @@
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                installPrompt.style.display = 'flex';
+                // Only show if not in standalone mode
+                if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+                    installPrompt.style.display = 'flex';
+                }
             });
 
             installBtn.addEventListener('click', async () => {
@@ -676,6 +833,21 @@
             // Safe area handling for notched phones
             document.documentElement.style.setProperty('--sat', 'env(safe-area-inset-top)');
             document.documentElement.style.setProperty('--sab', 'env(safe-area-inset-bottom)');
+            
+            // Force standalone display mode detection
+            (function() {
+                if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+                    document.documentElement.classList.add('pwa-mode');
+                    // Add meta tag to ensure full-screen
+                    let meta = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
+                    if (!meta) {
+                        meta = document.createElement('meta');
+                        meta.name = 'apple-mobile-web-app-capable';
+                        meta.content = 'yes';
+                        document.head.appendChild(meta);
+                    }
+                }
+            })();
             
             // ---------- Global state ----------
             let allRecords = [];
@@ -769,6 +941,85 @@
                 }
                 
                 document.getElementById('dataSummary').innerText = `${allRecords.length} total records`;
+            }
+
+            // NEW: Update upcoming check-ups
+            function updateUpcomingCheckups() {
+                const filterDays = parseInt(document.getElementById('checkupsFilter').value) || 30;
+                const today = new Date();
+                const futureDate = new Date();
+                
+                if (filterDays !== 'all') {
+                    futureDate.setDate(today.getDate() + filterDays);
+                } else {
+                    futureDate.setFullYear(today.getFullYear() + 5); // Far future for "all"
+                }
+                
+                // Filter records with check-ups needed and valid future dates
+                const upcomingCheckups = allRecords.filter(record => {
+                    if (record.check_up !== 'Yes' || !record.date) return false;
+                    
+                    const checkupDate = new Date(record.date);
+                    return checkupDate >= today && checkupDate <= futureDate;
+                }).sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by nearest first
+                
+                document.getElementById('upcomingCheckupsCount').innerText = upcomingCheckups.length;
+                
+                const container = document.getElementById('checkupsContainer');
+                
+                if (upcomingCheckups.length === 0) {
+                    container.innerHTML = '<div class="no-checkups">No upcoming check-ups scheduled</div>';
+                    return;
+                }
+                
+                let html = '';
+                upcomingCheckups.forEach(record => {
+                    const checkupDate = new Date(record.date);
+                    const daysUntil = Math.ceil((checkupDate - today) / (1000 * 60 * 60 * 24));
+                    
+                    // Determine urgency
+                    let urgencyClass = '';
+                    let urgencyText = '';
+                    if (daysUntil <= 3) {
+                        urgencyClass = 'checkup-urgent';
+                        urgencyText = '⚠️ Urgent';
+                    } else if (daysUntil <= 7) {
+                        urgencyClass = 'checkup-urgent';
+                        urgencyText = '🔔 This week';
+                    }
+                    
+                    const formattedDate = checkupDate.toLocaleDateString('en-NG', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    
+                    html += `
+                        <div class="checkup-card">
+                            <div class="checkup-client">${record.client_name || 'Unknown Client'}</div>
+                            <div class="checkup-details">
+                                <div class="checkup-detail">
+                                    <span>📍</span> ${record.address || 'No address'}
+                                </div>
+                                <div class="checkup-detail">
+                                    <span>📞</span> ${record.quotation_ref || 'No reference'}
+                                </div>
+                                <div class="checkup-detail">
+                                    <span>💰</span> ${formatMoney(record.quotation_total)}
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span class="checkup-date">📅 ${formattedDate}</span>
+                                ${urgencyText ? `<span class="${urgencyClass}">${urgencyText}</span>` : ''}
+                            </div>
+                            <div style="font-size: 0.8rem; color: #999; margin-top: 8px;">
+                                ${daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `${daysUntil} days left`}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
             }
 
             // fetch data with better error handling
@@ -877,6 +1128,9 @@
                 document.getElementById('periodDays').innerText = filteredRecords.length;
                 document.getElementById('periodRevenue').innerText = formatMoney(totalRevenue);
                 document.getElementById('periodProfit').innerText = formatMoney(totalProfit);
+                
+                // Update upcoming check-ups
+                updateUpcomingCheckups();
                 
                 // Update charts
                 updateRevenueChart();
@@ -1208,6 +1462,9 @@
                 
                 filterRecordsByDate();
             });
+
+            // Add checkups filter listener
+            document.getElementById('checkupsFilter').addEventListener('change', updateUpcomingCheckups);
 
             // device log
             if (sessionStorage.getItem('auth') === 'true') {
