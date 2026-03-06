@@ -3,7 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ConstructPro · Analytics Dashboard</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ConstructPro">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F28500">
+    <meta name="description" content="Construction Company Management">
+    
+    <!-- PWA Icons for iOS -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    
+    <!-- PWA Icons for Android -->
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="512x512" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Startup splash screen for iOS -->
+    <link rel="apple-touch-startup-image" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 667'%3E%3Crect width='375' height='667' fill='%23F28500'/%3E%3Ctext x='187.5' y='350' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3E🏗️%3C/text%3E%3Ctext x='187.5' y='420' font-size='20' text-anchor='middle' fill='white' font-family='Arial'%3EConstructPro%3C/text%3E%3C/svg%3E">
+    
+    <title>ConstructPro · Dashboard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,13 +33,37 @@
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
         
+        /* PWA specific styles */
         body {
             background: #f5f5f5;
             min-height: 100vh;
-            padding: 20px;
+            min-height: -webkit-fill-available;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
         }
         
-        /* login screen */
+        /* Hide browser UI in standalone mode */
+        @media all and (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+            
+            /* Add drag handle for iOS */
+            .header {
+                -webkit-app-region: drag;
+            }
+            
+            .header button {
+                -webkit-app-region: no-drag;
+            }
+        }
+        
+        /* login container */
         .login-wrapper {
             width: 100%;
             max-width: 400px;
@@ -27,13 +72,12 @@
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2);
             padding: 2rem 1.5rem;
             text-align: center;
-            margin: 50px auto;
         }
         .login-wrapper h2 {
             color: #F28500;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 6vw, 2rem);
         }
         .login-wrapper input {
             width: 100%;
@@ -43,6 +87,7 @@
             border-radius: 50px;
             margin-bottom: 1rem;
             outline: none;
+            transition: border 0.2s;
         }
         .login-wrapper input:focus {
             border-color: #F28500;
@@ -55,43 +100,45 @@
             border-radius: 50px;
             color: white;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             cursor: pointer;
+            box-shadow: 0 8px 14px -6px #F2850080;
+            transition: 0.1s;
         }
+        .login-wrapper button:active { transform: scale(0.98); }
         .error-msg {
             color: #b00020;
             margin-top: 0.5rem;
+            font-size: 0.95rem;
         }
 
-        /* main dashboard container */
-        .dashboard-container {
+        /* main app (hidden by default) */
+        .app-container {
+            width: 100%;
             max-width: 1400px;
             margin: 0 auto;
             display: none;
+            flex-direction: column;
+            gap: 1.2rem;
         }
-        
         /* header */
         .header {
             background: white;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.2rem;
+            padding-top: max(1rem, env(safe-area-inset-top));
             border-radius: 40px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1.5rem;
             box-shadow: 0 6px 14px #00000010;
             gap: 15px;
         }
         .header h1 {
             color: #F28500;
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 600;
-            line-height: 1.2;
-        }
-        .header .subtitle {
-            color: #666;
-            font-size: 0.9rem;
+            letter-spacing: -0.5px;
         }
         .header-right {
             display: flex;
@@ -119,7 +166,57 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
             white-space: nowrap;
+        }
+        
+        /* Install prompt banner */
+        .install-prompt {
+            background: linear-gradient(135deg, #F28500, #D6CB8D);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
+        }
+        .install-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .install-icon {
+            font-size: 2rem;
+        }
+        .install-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .install-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .install-btn {
+            background: white;
+            color: #F28500;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .close-install {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
         }
         
         /* data status banner */
@@ -128,7 +225,7 @@
             border-left: 8px solid #F28500;
             padding: 1rem 1.5rem;
             border-radius: 32px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -150,187 +247,256 @@
             color: #666;
             font-size: clamp(0.8rem, 3vw, 0.9rem);
         }
-        .refresh-btn {
-            background: #F28500;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
         
-        /* date range selector */
-        .date-range {
-            background: white;
-            padding: 1.2rem;
-            border-radius: 32px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .date-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        .date-controls input {
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 30px;
-            font-size: 14px;
-            width: auto;
-            min-width: 130px;
-        }
-        .date-controls button {
-            padding: 12px 24px;
-            background: #F28500;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            font-size: 0.9rem;
-        }
-        .quick-stats {
-            display: flex;
-            gap: 20px;
-            color: #666;
-            flex-wrap: wrap;
-        }
-        .quick-stats span {
-            font-size: clamp(0.8rem, 3vw, 0.95rem);
-            white-space: nowrap;
-        }
-        
-        /* KPI cards */
-        .kpi-grid {
+        /* summary cards */
+        .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 15px;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
         }
-        .kpi-card {
+        .card {
             background: white;
             border-radius: 28px;
             padding: 1.2rem 1rem;
             box-shadow: 0 8px 18px -8px #00000020;
             overflow: hidden;
         }
-        .kpi-title {
+        .card h3 {
             font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-            color: #666;
+            color: #4a4a4a;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            letter-spacing: 0.3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .kpi-value {
-            font-size: clamp(1.4rem, 5vw, 2.2rem);
+        .card .value {
+            font-size: clamp(1.4rem, 5vw, 2rem);
             font-weight: 700;
             color: #1e1e1e;
             line-height: 1.2;
             word-break: break-word;
         }
-        
-        /* charts grid */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 1.5rem;
-        }
-        .chart-card {
+
+        /* form panel */
+        .form-panel {
             background: white;
             border-radius: 32px;
-            padding: 1.2rem;
-            box-shadow: 0 8px 18px -8px #00000020;
+            padding: 1.5rem;
+            box-shadow: 0 12px 24px -12px #00000030;
         }
-        .chart-title {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            flex: 1 1 200px;
+            min-width: 150px;
+        }
+        .form-group label {
+            display: block;
             font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            margin-bottom: 5px;
             color: #333;
         }
-        .chart-container {
-            height: 250px; /* slightly smaller for mobile */
-            position: relative;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 300px;
-            }
-        }
-        
-        /* tables section */
-        .tables-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 1.5rem;
-        }
-        .table-card {
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 12px;
+            font-size: 16px;
+            border: 1.5px solid #ddd;
+            border-radius: 24px;
             background: white;
-            border-radius: 32px;
-            padding: 1.2rem;
-            box-shadow: 0 8px 18px -8px #00000020;
+        }
+        .form-group.check-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .form-group.check-group label { 
+            margin-bottom: 0;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+        }
+        .form-group.check-group input {
+            width: 22px;
+            height: 22px;
+        }
+        /* quotation items table */
+        .items-table-wrapper {
             overflow-x: auto;
+            margin: 15px 0;
+            border-radius: 24px;
+            border: 1px solid #eaeaea;
         }
-        .table-title {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        .ranking-table {
+        .items-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 280px;
+            min-width: 500px;
         }
-        .ranking-table th {
-            text-align: left;
+        .items-table th {
+            background: #F2850010;
             padding: 12px 8px;
-            background: #f8f8f8;
             font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-            color: #666;
             white-space: nowrap;
         }
-        .ranking-table td {
-            padding: 10px 8px;
+        .items-table td {
+            padding: 8px 4px;
             border-bottom: 1px solid #eee;
-            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+        }
+        .items-table input {
+            width: 100%;
+            padding: 12px 6px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .remove-item-btn {
+            background: #ffc2a1;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 12px;
+            font-weight: bold;
+            color: #a10000;
+            cursor: pointer;
+            min-width: 44px;
+            white-space: nowrap;
+        }
+        .add-item-btn {
+            background: #D6CB8D;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            white-space: nowrap;
+        }
+        .quotation-preview {
+            background: #f0f0f0;
+            border-radius: 28px;
+            padding: 12px 18px;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
+            word-break: break-word;
+            margin: 12px 0;
+        }
+        
+        /* totals display */
+        .totals-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #F2850008;
+            border-radius: 28px;
+            border: 1px solid #F2850030;
+        }
+        .total-item {
+            flex: 1 1 150px;
+            min-width: 120px;
+        }
+        .total-item .label {
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            color: #666;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .total-item .amount {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .total-item .amount.quote-total {
+            color: #F28500;
+        }
+        
+        .profit-loss {
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-weight: 700;
+            padding: 10px 0;
             word-break: break-word;
         }
         .profit { color: #0f7b3a; }
         .loss { color: #b13e3e; }
-        
-        /* no data placeholder */
-        .no-data {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: #999;
-            font-style: italic;
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0 10px;
+        }
+        .action-buttons button {
+            flex: 1 1 120px;
+            padding: 16px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            cursor: pointer;
+            min-width: 44px;
+            white-space: nowrap;
+        }
+        .save-btn { background: #F28500; color: white; }
+        .cancel-btn { background: #e0e0e0; }
+
+        /* records table */
+        .records-table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 32px;
+            padding: 0.5rem;
+            box-shadow: 0 8px 20px -12px black;
+        }
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
             font-size: 0.9rem;
         }
-        
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #F28500;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        .records-table th {
+            background: #D6CB8D;
+            padding: 14px 5px;
+            position: sticky;
+            top: 0;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            white-space: nowrap;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
+        .records-table td {
+            padding: 12px 5px;
+            border-bottom: 1px solid #ddd;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            word-break: break-word;
+        }
+        .tag {
+            display: inline-block;
+            background: #F2850020;
+            padding: 4px 8px;
+            border-radius: 30px;
+            margin: 2px;
+            font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+            border: 1px solid #F2850060;
+            white-space: nowrap;
+        }
+        .edit-btn, .delete-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 2px;
+            cursor: pointer;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            white-space: nowrap;
+        }
+        .edit-btn { background: #D6CB8D; }
+        .delete-btn { background: #f8d7da; color: #b02a37; }
+
+        /* toast */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -348,161 +514,159 @@
             animation: slide 0.2s;
             max-width: 90vw;
             word-break: break-word;
+            font-size: clamp(0.8rem, 3vw, 0.95rem);
         }
         .toast.success { border-color: #0f7b3a; }
         .toast.error { border-color: #b13e3e; }
         .toast.info { border-color: #F28500; }
         @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #F28500;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Responsive enhancements for very small screens */
+        /* Responsive for very small screens */
         @media (max-width: 480px) {
-            body { padding: 10px; }
-            .header h1 { font-size: 1.4rem; }
+            body { padding: 8px; }
+            .header { flex-direction: column; text-align: center; }
             .header-right { width: 100%; justify-content: center; }
-            .nav-btn, .logout-btn { flex: 1; text-align: center; }
-            .date-controls { flex-direction: column; width: 100%; }
-            .date-controls input { width: 100%; }
-            .date-controls button { width: 100%; }
-            .quick-stats { justify-content: center; }
-            .kpi-grid { grid-template-columns: repeat(2, 1fr); } /* two columns on very small */
-            .kpi-card { padding: 1rem 0.8rem; }
-            .kpi-value { font-size: 1.2rem; }
-            .chart-card { padding: 1rem; }
-            .table-card { padding: 1rem; }
-            .ranking-table th, .ranking-table td { padding: 8px 4px; }
+            .nav-btn, .logout-btn { flex: 1; }
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { flex-direction: column; gap: 12px; }
+            .form-group { min-width: 100%; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons button { width: 100%; }
+            .totals-row { flex-direction: column; gap: 10px; }
+            .total-item { width: 100%; }
         }
         
-        /* Ensure charts don't overflow */
-        canvas {
-            max-width: 100%;
-            height: auto !important;
+        /* PWA standalone mode adjustments */
+        @media all and (display-mode: standalone) {
+            .install-prompt {
+                display: none !important;
+            }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
+    <!-- Install Prompt (only shows in browser, not in standalone mode) -->
+    <div id="installPrompt" class="install-prompt" style="display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 1000;">
+        <div class="install-text">
+            <span class="install-icon">📱</span>
+            <div>
+                <div class="install-title">Install ConstructPro</div>
+                <div class="install-subtitle">Add to home screen for app-like experience</div>
+            </div>
+        </div>
+        <button class="install-btn" id="installBtn">Install</button>
+        <button class="close-install" id="closeInstall">✕</button>
+    </div>
+
     <!-- login screen -->
     <div id="loginScreen" class="login-wrapper">
-        <h2>📊 ANALYTICS DASHBOARD</h2>
+        <h2>🔐 CONSTRUCT PRO</h2>
         <input type="password" id="passwordInput" placeholder="enter password" inputmode="numeric">
-        <button id="loginBtn">ACCESS DASHBOARD</button>
+        <button id="loginBtn">LOGIN</button>
         <div id="loginError" class="error-msg"></div>
     </div>
 
-    <!-- main dashboard -->
-    <div id="dashboardMain" class="dashboard-container">
+    <!-- main dashboard (hidden initially) -->
+    <div id="appMain" class="app-container">
         <div class="header">
-            <div>
-                <h1>📊 ConstructPro Analytics</h1>
-                <div class="subtitle" id="dataSummary">Loading data...</div>
-            </div>
+            <h1>🏗️ ConstructPro</h1>
             <div class="header-right">
-                <button class="nav-btn" onclick="window.location.href='index.html'">← Main App</button>
+                <button class="nav-btn" onclick="window.location.href='analytics.html'">📊 Analytics</button>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
         </div>
 
         <!-- data status banner -->
-        <div class="data-status" id="dataStatusBanner">
+        <div class="data-status" id="dataStatusBanner" style="display: none;">
             <div class="status-icon">📊</div>
             <div class="status-text">
-                <h3 id="statusTitle">Loading data from Google Sheets...</h3>
-                <p id="statusMessage">Please wait while we fetch your business data</p>
-            </div>
-            <button class="refresh-btn" id="refreshData">🔄 Refresh</button>
-        </div>
-
-        <!-- date range selector -->
-        <div class="date-range">
-            <div class="date-controls">
-                <input type="date" id="startDate">
-                <span>to</span>
-                <input type="date" id="endDate">
-                <button id="applyDateFilter">Apply</button>
-                <button id="resetDateFilter" style="background: #e0e0e0; color: #333;">Reset</button>
-            </div>
-            <div class="quick-stats" id="dateRangeStats">
-                <span>📅 <span id="periodDays">0</span> records</span>
-                <span>💰 <span id="periodRevenue">₦0</span></span>
-                <span>📈 <span id="periodProfit">₦0</span></span>
+                <h3 id="statusTitle">Loading data...</h3>
+                <p id="statusMessage">Please wait while we fetch your data</p>
             </div>
         </div>
 
-        <!-- KPI cards -->
-        <div class="kpi-grid" id="kpiCards">
-            <div class="kpi-card">
-                <div class="kpi-title">Total Revenue</div>
-                <div class="kpi-value" id="totalRevenue">₦0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Net Profit</div>
-                <div class="kpi-value" id="netProfit">₦0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Profit Margin</div>
-                <div class="kpi-value" id="profitMargin">0%</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Total Projects</div>
-                <div class="kpi-value" id="totalProjects">0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Check-up Rate</div>
-                <div class="kpi-value" id="checkupRate">0%</div>
-            </div>
+        <!-- summary cards -->
+        <div class="summary-grid" id="summaryCards">
+            <div class="card"><h3>📋 Total records</h3><div class="value" id="totalRecords">0</div></div>
+            <div class="card"><h3>💰 Quotations total</h3><div class="value" id="totalQuotations">₦0</div></div>
+            <div class="card"><h3>💵 Payments</h3><div class="value" id="totalPayments">₦0</div></div>
+            <div class="card"><h3>📈 Profit</h3><div class="value" id="totalProfit">₦0</div></div>
+            <div class="card"><h3>🟡 Pending checkups</h3><div class="value" id="pendingCheck">0</div></div>
         </div>
 
-        <!-- charts -->
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">Revenue vs Profit Trend</div>
-                <div class="chart-container">
-                    <canvas id="revenueChart"></canvas>
-                </div>
+        <!-- Form panel -->
+        <div class="form-panel" id="formPanel">
+            <h3 style="margin-bottom: 1rem; font-size: clamp(1rem, 4vw, 1.2rem);">➕ Add / edit record</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Client name *</label><input type="text" id="clientName" placeholder="e.g. Hassan Bello"></div>
+                <div class="form-group"><label>Address *</label><input type="text" id="address" placeholder="No 3, road..."></div>
+                <div class="form-group"><label>Quotation ref</label><input type="text" id="quotationRef" placeholder="Q-242"></div>
             </div>
-            <div class="chart-card">
-                <div class="chart-title">Top Items by Revenue</div>
-                <div class="chart-container">
-                    <canvas id="itemsChart"></canvas>
-                </div>
-            </div>
-        </div>
 
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">Project Profit Distribution</div>
-                <div class="chart-container">
-                    <canvas id="distributionChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Monthly Performance</div>
-                <div class="chart-container">
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- rankings and tables -->
-        <div class="tables-section">
-            <div class="table-card">
-                <div class="table-title">🏆 Top Clients by Revenue</div>
-                <table class="ranking-table" id="topClientsTable">
-                    <thead>
-                        <tr><th>Client</th><th>Projects</th><th>Revenue</th><th>Profit</th></tr>
-                    </thead>
-                    <tbody id="topClientsBody"></tbody>
+            <!-- quotation items dynamic table -->
+            <label style="font-weight: 600; font-size: clamp(0.8rem, 3vw, 0.95rem);">📦 Quotation items (name, quantity, unit price)</label>
+            <div class="items-table-wrapper">
+                <table class="items-table" id="itemsTable">
+                    <thead><tr><th>Item name</th><th>Qty</th><th>Unit price (₦)</th><th>Line total</th><th></th></tr></thead>
+                    <tbody id="itemsBody"></tbody>
                 </table>
             </div>
-            <div class="table-card">
-                <div class="table-title">📦 Most Used Items</div>
-                <table class="ranking-table" id="topItemsTable">
-                    <thead>
-                        <tr><th>Item</th><th>Used</th><th>Revenue</th><th>Avg. Price</th></tr>
-                    </thead>
-                    <tbody id="topItemsBody"></tbody>
-                </table>
+            <button class="add-item-btn" id="addItemBtn">➕ Add item</button>
+            <div class="quotation-preview" id="quotationPreview">battery-4-23000, solar-6-345000</div>
+
+            <!-- Totals display section -->
+            <div class="totals-row">
+                <div class="total-item">
+                    <div class="label">Quotation Total</div>
+                    <div class="amount quote-total" id="quotationTotalDisplay">₦0.00</div>
+                </div>
+                <div class="total-item">
+                    <div class="label">Payment Received</div>
+                    <div class="amount" id="paymentDisplay">₦0.00</div>
+                </div>
+                <div class="total-item">
+                    <div class="label">Total Expenses</div>
+                    <div class="amount" id="expensesDisplay">₦0.00</div>
+                </div>
             </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>Payment received (₦)</label><input type="number" id="paymentAmount" step="0.01" value="0"></div>
+                <div class="form-group"><label>Material cost (₦)</label><input type="number" id="materialCost" step="0.01" value="0"></div>
+                <div class="form-group check-group">
+                    <input type="checkbox" id="checkUpNeeded">
+                    <label>Check‑up needed?</label>
+                </div>
+                <div class="form-group"><label>Check‑up date</label><input type="date" id="checkUpDate"></div>
+                <div class="form-group"><label>Transport (₦)</label><input type="number" id="transportCost" step="0.01" value="0"></div>
+                <div class="form-group"><label>Other cost (₦)</label><input type="number" id="otherCost" step="0.01" value="0"></div>
+            </div>
+
+            <div class="profit-loss" id="profitDisplay">₦0.00</div>
+            <div class="action-buttons">
+                <button class="save-btn" id="saveRecordBtn">💾 Save</button>
+                <button class="cancel-btn" id="cancelFormBtn">✖ Cancel</button>
+            </div>
+            <input type="hidden" id="editId" value="">
+        </div>
+
+        <!-- records table -->
+        <div class="records-table-wrapper">
+            <table class="records-table" id="recordsTable">
+                <thead><tr><th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th><th>Quote</th><th>Payment</th><th>Material</th><th>Check</th><th>Date</th><th>Transport</th><th>Other</th><th>Expenses</th><th>Profit</th><th>Actions</th></tr></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
         </div>
     </div>
 
@@ -511,15 +675,66 @@
 
     <script>
         (function() {
-            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec';
-            const PASSWORD = '1001';
-            
-            let allRecords = [];
-            let filteredRecords = [];
-            let checkupRecords = [];
-            let charts = {};
-            let currentCheckupFilter = 'all';
+            // ---------- CONFIG ----------
+            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
 
+            // ---------- PWA Installation ----------
+            let deferredPrompt;
+            const installPrompt = document.getElementById('installPrompt');
+            const installBtn = document.getElementById('installBtn');
+            const closeInstall = document.getElementById('closeInstall');
+
+            // Check if already in standalone mode
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                console.log('App is running in standalone mode');
+            } else {
+                // Show install prompt after 3 seconds
+                setTimeout(() => {
+                    installPrompt.style.display = 'flex';
+                }, 3000);
+            }
+
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installPrompt.style.display = 'flex';
+            });
+
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) {
+                    // Manual instructions for iOS
+                    alert('To install: Tap Share button → "Add to Home Screen"');
+                    return;
+                }
+                
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installPrompt.style.display = 'none';
+            });
+
+            closeInstall.addEventListener('click', () => {
+                installPrompt.style.display = 'none';
+            });
+
+            // Handle iOS standalone detection
+            if (window.navigator.standalone === true) {
+                document.body.classList.add('ios-standalone');
+            }
+
+            // Safe area handling for notched phones
+            document.documentElement.style.setProperty('--sat', 'env(safe-area-inset-top)');
+            document.documentElement.style.setProperty('--sab', 'env(safe-area-inset-bottom)');
+
+            // ---------- Global state ----------
+            let records = [];
+            let editId = null;
+            let items = [{ name: '', quantity: 1, unitPrice: 0 }];
+
+            // ---------- helpers ----------
             const toast = (msg, type = 'info') => {
                 const container = document.getElementById('toastContainer');
                 const el = document.createElement('div');
@@ -550,708 +765,311 @@
                 return '₦' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
             };
 
-            const formatMoneyShort = (val) => {
-                const num = Number(val) || 0;
-                if (num >= 1000000) {
-                    return '₦' + (num / 1000000).toFixed(1) + 'M';
-                } else if (num >= 1000) {
-                    return '₦' + (num / 1000).toFixed(0) + 'k';
-                }
-                return '₦' + num.toFixed(0);
-            };
-
-            const formatDate = (dateStr) => {
-                if (!dateStr) return 'Not set';
-                try {
-                    const date = new Date(dateStr);
-                    return date.toLocaleDateString('en-NG', { 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric' 
-                    });
-                } catch {
-                    return dateStr;
-                }
-            };
-
             const parseItemsFromString = (str) => {
-                if (!str) return [];
+                if (!str || str === 'null' || str === 'undefined') return [{ name: '', quantity: 1, unitPrice: 0 }];
                 try {
-                    return str.split(',').map(s => {
+                    const parsed = str.split(',').map(s => {
                         const parts = s.trim().split('-');
-                        return { 
-                            name: parts[0] || 'Unknown', 
-                            quantity: parseFloat(parts[1]) || 0, 
-                            unitPrice: parseFloat(parts[2]) || 0 
-                        };
-                    }).filter(i => i.name && i.name !== '');
+                        return { name: parts[0] || '', quantity: parseFloat(parts[1]) || 1, unitPrice: parseFloat(parts[2]) || 0 };
+                    }).filter(i => i.name);
+                    return parsed.length ? parsed : [{ name: '', quantity: 1, unitPrice: 0 }];
                 } catch (e) {
-                    return [];
+                    return [{ name: '', quantity: 1, unitPrice: 0 }];
                 }
             };
 
-            // Calculate profit as Payment - (Quotation Total + Transport + Other)
-            function calculateProfit(record) {
-                const payment = parseFloat(record.payment_amount) || 0;
-                const quoteTotal = parseFloat(record.quotation_total) || 0;
-                const transport = parseFloat(record.transport_cost) || 0;
-                const other = parseFloat(record.other_cost) || 0;
-                const totalCosts = quoteTotal + transport + other;
-                return payment - totalCosts;
+            const stringifyItems = (itemsArr) => {
+                return itemsArr.filter(i => i.name && i.name.trim() !== '').map(i => `${i.name.trim()}-${i.quantity || 1}-${i.unitPrice || 0}`).join(',');
+            };
+
+            const lineTotal = (item) => (item.quantity || 0) * (item.unitPrice || 0);
+
+            const calculateQuoteTotal = () => {
+                return items.reduce((acc, i) => acc + lineTotal(i), 0);
+            };
+
+            function renderItemsTable() {
+                const tbody = document.getElementById('itemsBody');
+                if (!tbody) return;
+                let html = '';
+                items.forEach((item, idx) => {
+                    const total = lineTotal(item);
+                    html += `<tr>
+                        <td><input type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
+                        <td><input type="number" value="${item.quantity || 1}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
+                        <td><input type="number" value="${item.unitPrice || 0}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
+                        <td>${formatMoney(total)}</td>
+                        <td><button class="remove-item-btn" data-index="${idx}">✖</button></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+
+                document.querySelectorAll('.item-input').forEach(inp => {
+                    inp.addEventListener('input', function(e) {
+                        const idx = this.dataset.index;
+                        const field = this.dataset.field;
+                        let val = this.value;
+                        if (field === 'quantity' || field === 'unitPrice') val = parseFloat(val) || 0;
+                        items[idx][field] = field === 'name' ? val : (parseFloat(val) || 0);
+                        const row = this.closest('tr');
+                        if (row && (field === 'quantity' || field === 'unitPrice')) {
+                            const totalCell = row.cells[3];
+                            if (totalCell) totalCell.innerText = formatMoney(lineTotal(items[idx]));
+                        }
+                        updateQuotationPreviewAndTotals();
+                    });
+                });
+
+                document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = e.target.dataset.index;
+                        if (items.length > 1) {
+                            items.splice(idx, 1);
+                        } else {
+                            items[0] = { name: '', quantity: 1, unitPrice: 0 };
+                        }
+                        renderItemsTable();
+                        updateQuotationPreviewAndTotals();
+                    });
+                });
             }
 
-            // Get check-up status
-            function getCheckupStatus(checkupDate) {
-                if (!checkupDate) return null;
+            function updateQuotationPreviewAndTotals() {
+                const previewEl = document.getElementById('quotationPreview');
+                const validItems = items.filter(i => i.name && i.name.trim() !== '');
+                previewEl.innerText = validItems.length ? stringifyItems(validItems) : '(empty)';
+
+                const quoteTotal = validItems.reduce((acc, i) => acc + lineTotal(i), 0);
                 
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
+                document.getElementById('quotationTotalDisplay').innerText = formatMoney(quoteTotal);
                 
-                const checkDate = new Date(checkupDate);
-                checkDate.setHours(0, 0, 0, 0);
+                const payment = parseFloat(document.getElementById('paymentAmount').value) || 0;
+                const material = parseFloat(document.getElementById('materialCost').value) || 0;
+                const transport = parseFloat(document.getElementById('transportCost').value) || 0;
+                const other = parseFloat(document.getElementById('otherCost').value) || 0;
                 
-                const diffTime = checkDate - today;
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                document.getElementById('paymentDisplay').innerText = formatMoney(payment);
                 
-                if (diffDays < 0) return { status: 'overdue', days: Math.abs(diffDays), label: 'Overdue' };
-                if (diffDays === 0) return { status: 'today', days: 0, label: 'Today' };
-                if (diffDays <= 7) return { status: 'upcoming', days: diffDays, label: 'Upcoming' };
-                return { status: 'upcoming', days: diffDays, label: 'Upcoming' };
+                const totalExpenses = material + transport + other;
+                document.getElementById('expensesDisplay').innerText = formatMoney(totalExpenses);
+                
+                const profit = payment - totalExpenses;
+                const profitEl = document.getElementById('profitDisplay');
+                profitEl.innerText = formatMoney(profit);
+                profitEl.className = 'profit-loss ' + (profit >= 0 ? 'profit' : 'loss');
             }
 
-            async function fetchData() {
+            function resetForm() {
+                document.getElementById('clientName').value = '';
+                document.getElementById('address').value = '';
+                document.getElementById('quotationRef').value = '';
+                document.getElementById('paymentAmount').value = 0;
+                document.getElementById('materialCost').value = 0;
+                document.getElementById('transportCost').value = 0;
+                document.getElementById('otherCost').value = 0;
+                document.getElementById('checkUpNeeded').checked = false;
+                document.getElementById('checkUpDate').value = '';
+                document.getElementById('editId').value = '';
+                items = [{ name: '', quantity: 1, unitPrice: 0 }];
+                renderItemsTable();
+                updateQuotationPreviewAndTotals();
+                editId = null;
+            }
+
+            function loadRecordForEdit(rec) {
+                document.getElementById('clientName').value = rec.client_name || '';
+                document.getElementById('address').value = rec.address || '';
+                document.getElementById('quotationRef').value = rec.quotation_ref || '';
+                document.getElementById('paymentAmount').value = rec.payment_amount || 0;
+                document.getElementById('materialCost').value = rec.material_cost || 0;
+                document.getElementById('transportCost').value = rec.transport_cost || 0;
+                document.getElementById('otherCost').value = rec.other_cost || 0;
+                document.getElementById('checkUpNeeded').checked = (rec.check_up || 'No') === 'Yes';
+                document.getElementById('checkUpDate').value = rec.date || '';
+                document.getElementById('editId').value = rec.id;
+                items = parseItemsFromString(rec.quotation_details || '');
+                renderItemsTable();
+                updateQuotationPreviewAndTotals();
+                editId = rec.id;
+            }
+
+            async function fetchRecords() {
                 showLoader(true);
                 
+                // Show status banner
+                const banner = document.getElementById('dataStatusBanner');
+                banner.style.display = 'flex';
                 document.getElementById('statusTitle').innerText = 'Loading data...';
+                document.getElementById('statusMessage').innerText = 'Connecting to Google Sheets...';
                 
                 try {
-                    const testRes = await fetch(`${API_URL}?action=test`);
-                    if (!testRes.ok) throw new Error('Cannot connect to API');
-                    
                     const res = await fetch(`${API_URL}?action=getAll`);
                     const data = await res.json();
                     
                     if (data.records && Array.isArray(data.records)) {
-                        allRecords = data.records.map(record => ({
+                        records = data.records.map(record => ({
                             ...record,
-                            parsedItems: parseItemsFromString(record.quotation_details),
+                            profit: parseFloat(record.profit) || 0,
                             payment_amount: parseFloat(record.payment_amount) || 0,
                             quotation_total: parseFloat(record.quotation_total) || 0,
+                            material_cost: parseFloat(record.material_cost) || 0,
                             transport_cost: parseFloat(record.transport_cost) || 0,
                             other_cost: parseFloat(record.other_cost) || 0
                         }));
                         
-                        toast(`Loaded ${allRecords.length} records`, 'success');
+                        banner.style.borderLeftColor = '#0f7b3a';
+                        document.getElementById('statusTitle').innerText = '✅ Data Loaded';
+                        document.getElementById('statusMessage').innerText = `Found ${records.length} records`;
+                        
+                        toast(`Loaded ${records.length} records`, 'success');
                     } else {
-                        allRecords = [];
+                        records = [];
+                        banner.style.borderLeftColor = '#F28500';
+                        document.getElementById('statusTitle').innerText = 'ℹ️ No Data';
+                        document.getElementById('statusMessage').innerText = 'No records found in sheet';
                     }
+                    
+                    renderTableAndSummaries();
+                    
+                    // Hide banner after 3 seconds
+                    setTimeout(() => {
+                        banner.style.display = 'none';
+                    }, 3000);
                     
                 } catch (e) {
-                    allRecords = [];
-                    toast('Failed to load data', 'error');
+                    console.error('Fetch error:', e);
+                    records = [];
+                    banner.style.borderLeftColor = '#b13e3e';
                     document.getElementById('statusTitle').innerText = '⚠️ Connection Error';
+                    document.getElementById('statusMessage').innerText = 'Could not connect to Google Sheets. Check API URL.';
+                    toast('Failed to load data', 'error');
+                } finally {
+                    showLoader(false);
                 }
-                
-                const today = new Date();
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(today.getDate() - 30);
-                
-                document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-                document.getElementById('endDate').value = today.toISOString().split('T')[0];
-                
-                filteredRecords = [...allRecords];
-                updateAll();
-                showLoader(false);
             }
 
-            function filterRecordsByDate() {
-                const start = document.getElementById('startDate').value;
-                const end = document.getElementById('endDate').value;
-                
-                if (!start || !end) {
-                    filteredRecords = [...allRecords];
-                } else {
-                    const startDate = new Date(start);
-                    const endDate = new Date(end);
-                    endDate.setHours(23, 59, 59);
-                    
-                    filteredRecords = allRecords.filter(record => {
-                        if (!record.timestamp) return false;
-                        const recordDate = new Date(record.timestamp);
-                        return recordDate >= startDate && recordDate <= endDate;
-                    });
-                }
-                
-                updateAll();
-            }
-
-            // NEW: Update Check-up List
-            function updateCheckupList() {
-                // Get all records that need check-ups
-                checkupRecords = filteredRecords.filter(record => 
-                    record.check_up === 'Yes' && record.date
-                );
-                
-                // Sort by check-up date
-                checkupRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                // Apply filter
-                let filteredCheckups = checkupRecords;
-                if (currentCheckupFilter !== 'all') {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    
-                    filteredCheckups = checkupRecords.filter(record => {
-                        const checkDate = new Date(record.date);
-                        checkDate.setHours(0, 0, 0, 0);
-                        const diffDays = Math.ceil((checkDate - today) / (1000 * 60 * 60 * 24));
-                        
-                        switch(currentCheckupFilter) {
-                            case 'upcoming': return diffDays > 0 && diffDays <= 7;
-                            case 'today': return diffDays === 0;
-                            case 'overdue': return diffDays < 0;
-                            case 'completed': return false; // Would need a completed field
-                            default: return true;
-                        }
-                    });
-                }
-                
-                // Update counts
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                
-                const upcoming = checkupRecords.filter(r => {
-                    const d = new Date(r.date);
-                    d.setHours(0, 0, 0, 0);
-                    const days = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-                    return days > 0 && days <= 7;
-                }).length;
-                
-                const todayCount = checkupRecords.filter(r => {
-                    const d = new Date(r.date);
-                    d.setHours(0, 0, 0, 0);
-                    return d.getTime() === today.getTime();
-                }).length;
-                
-                const overdue = checkupRecords.filter(r => {
-                    const d = new Date(r.date);
-                    d.setHours(0, 0, 0, 0);
-                    return d < today;
-                }).length;
-                
-                document.getElementById('checkupCount').innerText = `${checkupRecords.length} pending`;
-                document.getElementById('upcomingCount').innerText = upcoming;
-                document.getElementById('todayCount').innerText = todayCount;
-                document.getElementById('overdueCount').innerText = overdue;
-                document.getElementById('completedCount').innerText = '0';
-                
-                // Render table
-                const tbody = document.getElementById('checkupTableBody');
-                if (filteredCheckups.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="no-data">No check-ups found</td></tr>';
-                    return;
-                }
-                
+            function renderTableAndSummaries() {
+                const tbody = document.getElementById('tableBody');
                 let html = '';
-                filteredCheckups.forEach(record => {
-                    const status = getCheckupStatus(record.date);
-                    const checkDate = new Date(record.date);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const diffDays = Math.ceil((checkDate - today) / (1000 * 60 * 60 * 24));
+                let totalQuot = 0, totalPay = 0, totalProf = 0, pending = 0;
+                
+                records.forEach(r => {
+                    const itemsArr = parseItemsFromString(r.quotation_details);
+                    const tags = itemsArr.filter(i => i.name).map(i => 
+                        `<span class="tag">${i.name}-${i.quantity}-₦${i.unitPrice}</span>`
+                    ).join(' ');
                     
-                    let statusClass = 'status-upcoming';
-                    let statusText = 'Upcoming';
+                    const profitVal = parseFloat(r.profit) || 0;
+                    totalQuot += parseFloat(r.quotation_total) || 0;
+                    totalPay += parseFloat(r.payment_amount) || 0;
+                    totalProf += profitVal;
+                    if (r.check_up === 'Yes') pending++;
                     
-                    if (diffDays < 0) {
-                        statusClass = 'status-overdue';
-                        statusText = 'Overdue';
-                    } else if (diffDays === 0) {
-                        statusClass = 'status-today';
-                        statusText = 'Today';
-                    }
-                    
-                    html += `
-                        <tr>
-                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                            <td><strong>${record.client_name || 'Unknown'}</strong></td>
-                            <td>${record.address || 'N/A'}</td>
-                            <td>${formatDate(record.date)}</td>
-                            <td>${diffDays < 0 ? Math.abs(diffDays) + ' days ago' : diffDays === 0 ? 'Today' : diffDays + ' days'}</td>
-                            <td>${formatMoney(record.payment_amount)}</td>
-                            <td>${record.quotation_ref || 'N/A'}</td>
-                            <td class="checkup-actions">
-                                <button class="btn-complete" onclick="markCheckupComplete('${record.id}')">✓ Complete</button>
-                                <button class="btn-reschedule" onclick="rescheduleCheckup('${record.id}')">↻ Reschedule</button>
-                            </td>
-                        </tr>
-                    `;
+                    html += `<tr>
+                        <td>${r.id || ''}</td>
+                        <td>${r.client_name || ''}</td>
+                        <td>${r.address || ''}</td>
+                        <td>${r.quotation_ref || ''}</td>
+                        <td>${tags}</td>
+                        <td>${formatMoney(r.quotation_total)}</td>
+                        <td>${formatMoney(r.payment_amount)}</td>
+                        <td>${formatMoney(r.material_cost)}</td>
+                        <td>${r.check_up || 'No'}</td>
+                        <td>${r.date || ''}</td>
+                        <td>${formatMoney(r.transport_cost)}</td>
+                        <td>${formatMoney(r.other_cost)}</td>
+                        <td>${formatMoney(r.total_expenses)}</td>
+                        <td class="${profitVal >= 0 ? 'profit' : 'loss'}">${formatMoney(profitVal)}</td>
+                        <td>
+                            <button class="edit-btn" data-id="${r.id}">Edit</button>
+                            <button class="delete-btn" data-id="${r.id}">Del</button>
+                        </td>
+                    </tr>`;
                 });
                 
-                tbody.innerHTML = html;
-            }
+                tbody.innerHTML = html || '<tr><td colspan="15" style="text-align: center; padding: 2rem; color: #999;">No records found</td></tr>';
+                
+                document.getElementById('totalRecords').innerText = records.length;
+                document.getElementById('totalQuotations').innerText = formatMoney(totalQuot);
+                document.getElementById('totalPayments').innerText = formatMoney(totalPay);
+                document.getElementById('totalProfit').innerText = formatMoney(totalProf);
+                document.getElementById('pendingCheck').innerText = pending;
 
-            // Mock functions for check-up actions (would need API integration)
-            window.markCheckupComplete = function(id) {
-                toast(`Check-up ${id} marked as complete`, 'success');
-                // In production, this would call an API to update the record
-            };
-            
-            window.rescheduleCheckup = function(id) {
-                const newDate = prompt('Enter new check-up date (YYYY-MM-DD):');
-                if (newDate) {
-                    toast(`Check-up ${id} rescheduled to ${newDate}`, 'info');
-                    // In production, this would call an API to update the record
-                }
-            };
-
-            // High/Low Revenue Bar Chart
-            function updateRevenueBarChart() {
-                const ctx = document.getElementById('revenueBarChart').getContext('2d');
-                
-                if (charts.revenueBarChart) charts.revenueBarChart.destroy();
-                
-                if (filteredRecords.length === 0) {
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#999';
-                    ctx.fillText('No data available', 50, 150);
-                    return;
-                }
-                
-                // Calculate average revenue
-                const revenues = filteredRecords.map(r => r.payment_amount);
-                const avgRevenue = revenues.reduce((a, b) => a + b, 0) / revenues.length;
-                
-                // Get top 10 projects by revenue
-                const topProjects = [...filteredRecords]
-                    .sort((a, b) => b.payment_amount - a.payment_amount)
-                    .slice(0, 10);
-                
-                // Prepare data
-                const labels = topProjects.map(p => {
-                    const name = p.client_name || 'Unknown';
-                    return name.length > 15 ? name.substring(0, 12) + '...' : name;
-                });
-                
-                const revenueData = topProjects.map(p => p.payment_amount);
-                
-                // Color bars based on high/low revenue
-                const barColors = topProjects.map(p => 
-                    p.payment_amount >= avgRevenue ? '#F28500' : '#D6CB8D'
-                );
-                
-                charts.revenueBarChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Revenue',
-                            data: revenueData,
-                            backgroundColor: barColors,
-                            borderRadius: 8,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        const project = topProjects[context.dataIndex];
-                                        const totalCosts = project.quotation_total + project.transport_cost + project.other_cost;
-                                        const profit = project.payment_amount - totalCosts;
-                                        return [
-                                            `Revenue: ${formatMoney(project.payment_amount)}`,
-                                            `Quote: ${formatMoney(project.quotation_total)}`,
-                                            `Transport: ${formatMoney(project.transport_cost)}`,
-                                            `Other: ${formatMoney(project.other_cost)}`,
-                                            `Profit: ${formatMoney(profit)}`
-                                        ];
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Revenue (₦)'
-                                },
-                                ticks: {
-                                    callback: (value) => formatMoneyShort(value)
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    maxRotation: 45,
-                                    minRotation: 45
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            function updateProfitabilityMatrix() {
-                if (filteredRecords.length === 0) {
-                    document.getElementById('starsBubbles').innerHTML = '<div class="no-data">No projects</div>';
-                    document.getElementById('efficientBubbles').innerHTML = '<div class="no-data">No projects</div>';
-                    document.getElementById('warningBubbles').innerHTML = '<div class="no-data">No projects</div>';
-                    document.getElementById('redflagBubbles').innerHTML = '<div class="no-data">No projects</div>';
-                    return;
-                }
-                
-                // Calculate profits for all records
-                const recordsWithProfit = filteredRecords.map(record => ({
-                    ...record,
-                    calculatedProfit: calculateProfit(record)
-                }));
-                
-                const revenues = recordsWithProfit.map(r => r.payment_amount).sort((a, b) => a - b);
-                const medianRevenue = revenues[Math.floor(revenues.length / 2)] || 0;
-                
-                const stars = [], efficient = [], warning = [], redflag = [];
-                
-                recordsWithProfit.forEach(record => {
-                    const isHighRevenue = record.payment_amount >= medianRevenue;
-                    const isProfitable = record.calculatedProfit > 0;
-                    
-                    if (isHighRevenue && isProfitable) stars.push(record);
-                    else if (!isHighRevenue && isProfitable) efficient.push(record);
-                    else if (!isHighRevenue && !isProfitable) warning.push(record);
-                    else redflag.push(record);
-                });
-                
-                document.getElementById('starsCount').innerText = `${stars.length} projects`;
-                document.getElementById('efficientCount').innerText = `${efficient.length} projects`;
-                document.getElementById('warningCount').innerText = `${warning.length} projects`;
-                document.getElementById('redflagCount').innerText = `${redflag.length} projects`;
-                
-                const totalProfit = recordsWithProfit.reduce((sum, r) => sum + r.calculatedProfit, 0);
-                const avgMargin = recordsWithProfit.reduce((sum, r) => {
-                    return sum + (r.payment_amount ? (r.calculatedProfit / r.payment_amount) * 100 : 0);
-                }, 0) / (recordsWithProfit.length || 1);
-                
-                document.getElementById('totalProfitValue').innerText = formatMoney(totalProfit);
-                document.getElementById('avgMarginValue').innerText = avgMargin.toFixed(1) + '%';
-                document.getElementById('profitableCount').innerText = stars.length + efficient.length;
-                document.getElementById('lossCount').innerText = warning.length + redflag.length;
-                
-                renderBubbles('starsBubbles', stars, '#0f7b3a');
-                renderBubbles('efficientBubbles', efficient, '#F28500');
-                renderBubbles('warningBubbles', warning, '#b13e3e');
-                renderBubbles('redflagBubbles', redflag, '#b13e3e');
-            }
-
-            function renderBubbles(containerId, projects, color) {
-                const container = document.getElementById(containerId);
-                if (projects.length === 0) {
-                    container.innerHTML = '<div style="color: #999; padding: 20px;">No projects</div>';
-                    return;
-                }
-                
-                projects.sort((a, b) => b.payment_amount - a.payment_amount);
-                const maxRevenue = Math.max(...projects.map(p => p.payment_amount));
-                
-                let html = '';
-                projects.forEach(project => {
-                    const sizeRatio = project.payment_amount / maxRevenue;
-                    let sizeClass = 'bubble-medium';
-                    if (sizeRatio > 0.7) sizeClass = 'bubble-large';
-                    else if (sizeRatio < 0.3) sizeClass = 'bubble-small';
-                    
-                    const initials = (project.client_name || '??')
-                        .split(' ')
-                        .map(n => n[0])
-                        .join('')
-                        .substring(0, 2)
-                        .toUpperCase();
-                    
-                    const totalCosts = project.quotation_total + project.transport_cost + project.other_cost;
-                    const margin = project.payment_amount ? 
-                        ((project.calculatedProfit / project.payment_amount) * 100).toFixed(1) : 0;
-                    
-                    html += `
-                        <div class="project-bubble ${sizeClass}" style="background: ${color};">
-                            ${initials}
-                            <div class="bubble-tooltip" style="border-left-color: ${color};">
-                                <strong>${project.client_name || 'Unknown'}</strong><br>
-                                Revenue: ${formatMoney(project.payment_amount)}<br>
-                                Quote: ${formatMoney(project.quotation_total)}<br>
-                                Transport: ${formatMoney(project.transport_cost)}<br>
-                                Other: ${formatMoney(project.other_cost)}<br>
-                                Total Costs: ${formatMoney(totalCosts)}<br>
-                                Profit: ${formatMoney(project.calculatedProfit)}<br>
-                                Margin: ${margin}%
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                container.innerHTML = html;
-            }
-
-            function updateItemsChart() {
-                const ctx = document.getElementById('itemsChart').getContext('2d');
-                
-                const itemStats = {};
-                filteredRecords.forEach(record => {
-                    record.parsedItems.forEach(item => {
-                        if (item.name && item.name !== 'Unknown') {
-                            if (!itemStats[item.name]) {
-                                itemStats[item.name] = { revenue: 0, count: 0 };
-                            }
-                            itemStats[item.name].revenue += item.quantity * item.unitPrice;
-                            itemStats[item.name].count++;
-                        }
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.dataset.id;
+                        const rec = records.find(r => r.id == id);
+                        if (rec) loadRecordForEdit(rec);
                     });
                 });
                 
-                const topItems = Object.entries(itemStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 8);
-                
-                if (charts.itemsChart) charts.itemsChart.destroy();
-                
-                if (topItems.length === 0) {
-                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                    return;
-                }
-                
-                charts.itemsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: topItems.map(i => i[0]),
-                        datasets: [{
-                            data: topItems.map(i => i[1].revenue),
-                            backgroundColor: '#F28500',
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        plugins: { 
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        const item = topItems[context.dataIndex];
-                                        return [
-                                            `Revenue: ${formatMoney(context.raw)}`,
-                                            `Times used: ${item[1].count}`
-                                        ];
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    callback: (value) => formatMoneyShort(value)
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            function updateDistributionChart() {
-                const ctx = document.getElementById('distributionChart').getContext('2d');
-                
-                let profitable = 0, loss = 0;
-                filteredRecords.forEach(record => {
-                    const profit = calculateProfit(record);
-                    if (profit > 0) profitable++;
-                    else if (profit < 0) loss++;
-                });
-                
-                if (charts.distributionChart) charts.distributionChart.destroy();
-                
-                if (filteredRecords.length === 0) {
-                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                    return;
-                }
-                
-                charts.distributionChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Profitable', 'Loss'],
-                        datasets: [{
-                            data: [profitable, loss],
-                            backgroundColor: ['#0f7b3a', '#b13e3e'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { position: 'bottom' },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        const value = context.raw;
-                                        const total = filteredRecords.length;
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return `${context.label}: ${value} projects (${percentage}%)`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            function updateMonthlyChart() {
-                const ctx = document.getElementById('monthlyChart').getContext('2d');
-                
-                const monthlyProfit = {};
-                filteredRecords.forEach(record => {
-                    if (record.timestamp) {
-                        const date = new Date(record.timestamp);
-                        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                        monthlyProfit[monthKey] = (monthlyProfit[monthKey] || 0) + calculateProfit(record);
-                    }
-                });
-                
-                const sortedMonths = Object.keys(monthlyProfit).sort().slice(-6);
-                const profits = sortedMonths.map(m => monthlyProfit[m]);
-                
-                if (charts.monthlyChart) charts.monthlyChart.destroy();
-                
-                if (sortedMonths.length === 0) {
-                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                    return;
-                }
-                
-                charts.monthlyChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: sortedMonths,
-                        datasets: [{
-                            data: profits,
-                            backgroundColor: profits.map(p => p >= 0 ? '#0f7b3a' : '#b13e3e'),
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => `Profit: ${formatMoney(context.raw)}`
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                ticks: {
-                                    callback: (value) => formatMoneyShort(value)
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            function updateTopClients() {
-                const clientStats = {};
-                filteredRecords.forEach(record => {
-                    const client = record.client_name || 'Unknown';
-                    if (!clientStats[client]) {
-                        clientStats[client] = { revenue: 0, profit: 0, count: 0 };
-                    }
-                    clientStats[client].revenue += record.payment_amount || 0;
-                    clientStats[client].profit += calculateProfit(record);
-                    clientStats[client].count++;
-                });
-                
-                const topClients = Object.entries(clientStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 10);
-                
-                const tbody = document.getElementById('topClientsBody');
-                tbody.innerHTML = topClients.length ? topClients.map(([client, stats]) => `
-                    <tr>
-                        <td><strong>${client}</strong></td>
-                        <td>${stats.count}</td>
-                        <td>${formatMoney(stats.revenue)}</td>
-                        <td class="${stats.profit >= 0 ? 'profit' : 'loss'}">${formatMoney(stats.profit)}</td>
-                    </tr>
-                `).join('') : '<tr><td colspan="4" class="no-data">No data</td></tr>';
-            }
-
-            function updateTopItems() {
-                const itemStats = {};
-                filteredRecords.forEach(record => {
-                    record.parsedItems.forEach(item => {
-                        if (item.name && item.name !== 'Unknown') {
-                            if (!itemStats[item.name]) {
-                                itemStats[item.name] = { revenue: 0, count: 0, totalPrice: 0 };
-                            }
-                            itemStats[item.name].revenue += item.quantity * item.unitPrice;
-                            itemStats[item.name].count++;
-                            itemStats[item.name].totalPrice += item.unitPrice;
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        if (!confirm('Delete record?')) return;
+                        const id = e.target.dataset.id;
+                        showLoader(true);
+                        try {
+                            await fetch(API_URL, { 
+                                method: 'POST', 
+                                body: JSON.stringify({ action: 'delete', id: id }) 
+                            });
+                            toast('Deleted', 'success');
+                            fetchRecords();
+                        } catch { 
+                            toast('Error', 'error'); 
+                        } finally { 
+                            showLoader(false); 
                         }
                     });
                 });
-                
-                const topItems = Object.entries(itemStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 10);
-                
-                const tbody = document.getElementById('topItemsBody');
-                tbody.innerHTML = topItems.length ? topItems.map(([item, stats]) => `
-                    <tr>
-                        <td><strong>${item}</strong></td>
-                        <td>${stats.count}</td>
-                        <td>${formatMoney(stats.revenue)}</td>
-                        <td>${formatMoney(stats.totalPrice / stats.count)}</td>
-                    </tr>
-                `).join('') : '<tr><td colspan="4" class="no-data">No data</td></tr>';
             }
 
-            function updateAll() {
-                const totalRevenue = filteredRecords.reduce((sum, r) => sum + (r.payment_amount || 0), 0);
-                const totalProfit = filteredRecords.reduce((sum, r) => sum + calculateProfit(r), 0);
-                const profitMargin = totalRevenue ? ((totalProfit / totalRevenue) * 100).toFixed(1) : 0;
+            async function saveRecord() {
+                const client = document.getElementById('clientName').value.trim();
+                const address = document.getElementById('address').value.trim();
                 
-                document.getElementById('totalRevenue').innerText = formatMoney(totalRevenue);
-                document.getElementById('netProfit').innerText = formatMoney(totalProfit);
-                document.getElementById('profitMargin').innerText = profitMargin + '%';
-                document.getElementById('totalProjects').innerText = filteredRecords.length;
+                if (!client || !address) { 
+                    toast('Client and address required', 'error'); 
+                    return; 
+                }
                 
-                document.getElementById('periodDays').innerText = filteredRecords.length;
-                document.getElementById('periodRevenue').innerText = formatMoney(totalRevenue);
-                document.getElementById('periodProfit').innerText = formatMoney(totalProfit);
+                const payload = {
+                    action: editId ? 'update' : 'add',
+                    id: editId || undefined,
+                    client_name: client,
+                    address: address,
+                    quotation_ref: document.getElementById('quotationRef').value,
+                    quotation_details: stringifyItems(items),
+                    payment_amount: parseFloat(document.getElementById('paymentAmount').value) || 0,
+                    material_cost: parseFloat(document.getElementById('materialCost').value) || 0,
+                    transport_cost: parseFloat(document.getElementById('transportCost').value) || 0,
+                    other_cost: parseFloat(document.getElementById('otherCost').value) || 0,
+                    check_up: document.getElementById('checkUpNeeded').checked ? 'Yes' : 'No',
+                    date: document.getElementById('checkUpDate').value || '',
+                };
                 
-                document.getElementById('dataSummary').innerText = `${filteredRecords.length} records`;
-                document.getElementById('statusTitle').innerText = '✅ Data Loaded';
-                document.getElementById('statusMessage').innerText = `Showing ${filteredRecords.length} projects`;
-                
-                updateRevenueBarChart();
-                updateProfitabilityMatrix();
-                updateItemsChart();
-                updateDistributionChart();
-                updateMonthlyChart();
-                updateCheckupList();
-                updateTopClients();
-                updateTopItems();
+                showLoader(true);
+                try {
+                    await fetch(API_URL, { 
+                        method: 'POST', 
+                        body: JSON.stringify(payload) 
+                    });
+                    toast('Saved successfully', 'success');
+                    resetForm();
+                    fetchRecords();
+                } catch (e) { 
+                    toast('Save failed', 'error'); 
+                } finally { 
+                    showLoader(false); 
+                }
             }
 
-            // Login
+            // Login logic
+            const PASSWORD = '1001';
             if (sessionStorage.getItem('auth') === 'true') {
                 document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('dashboardMain').style.display = 'block';
-                fetchData();
+                document.getElementById('appMain').style.display = 'flex';
+                fetchRecords();
             }
 
             document.getElementById('loginBtn').addEventListener('click', () => {
@@ -1259,8 +1077,8 @@
                 if (pwd === PASSWORD) {
                     sessionStorage.setItem('auth', 'true');
                     document.getElementById('loginScreen').style.display = 'none';
-                    document.getElementById('dashboardMain').style.display = 'block';
-                    fetchData();
+                    document.getElementById('appMain').style.display = 'flex';
+                    fetchRecords();
                 } else {
                     document.getElementById('loginError').innerText = 'Incorrect password';
                 }
@@ -1271,35 +1089,31 @@
                 location.reload();
             });
 
-            document.getElementById('refreshData').addEventListener('click', fetchData);
-            document.getElementById('applyDateFilter').addEventListener('click', filterRecordsByDate);
-            
-            document.getElementById('resetDateFilter').addEventListener('click', () => {
-                const today = new Date();
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(today.getDate() - 30);
-                
-                document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-                document.getElementById('endDate').value = today.toISOString().split('T')[0];
-                filterRecordsByDate();
+            // Event listeners
+            document.getElementById('addItemBtn').addEventListener('click', () => {
+                items.push({ name: '', quantity: 1, unitPrice: 0 });
+                renderItemsTable();
+                updateQuotationPreviewAndTotals();
             });
 
-            // Check-up filter events
-            document.getElementById('applyCheckupFilter').addEventListener('click', () => {
-                currentCheckupFilter = document.getElementById('checkupFilter').value;
-                updateCheckupList();
+            ['paymentAmount','materialCost','transportCost','otherCost'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateQuotationPreviewAndTotals);
             });
 
-            document.getElementById('resetCheckupFilter').addEventListener('click', () => {
-                document.getElementById('checkupFilter').value = 'all';
-                currentCheckupFilter = 'all';
-                updateCheckupList();
-            });
+            document.getElementById('saveRecordBtn').addEventListener('click', saveRecord);
+            document.getElementById('cancelFormBtn').addEventListener('click', resetForm);
+
+            // Initial render
+            resetForm();
+
+            // Device log
+            if (sessionStorage.getItem('auth') === 'true') {
+                navigator.userAgent && fetch(API_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: 'log', device: navigator.userAgent }) 
+                }).catch(() => {});
+            }
         })();
-        // (JavaScript code remains exactly the same as in the previous version – it's already robust)
-        // Paste the full JavaScript from the previous answer here.
-        // For brevity, I'm not repeating the 200+ lines of JS, but you must include it.
-        // Make sure to replace API_URL and keep all functions.
     </script>
 </body>
 </html>
