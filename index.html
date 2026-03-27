@@ -29,6 +29,7 @@
             min-height: 100vh;
             min-height: -webkit-fill-available;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 12px;
@@ -57,6 +58,7 @@
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2);
             padding: 2rem 1.5rem;
             text-align: center;
+            margin-bottom: 1rem;
         }
         .login-wrapper h2 {
             color: #F28500;
@@ -91,7 +93,47 @@
             color: #b00020;
             margin-top: 0.5rem;
         }
-        /* Main app */
+        /* Install prompt – placed below login card */
+        .install-prompt {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(135deg, #F28500, #D6CB8D);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
+            margin-top: 0.5rem;
+        }
+        .install-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .install-icon { font-size: 2rem; }
+        .install-title { font-weight: 600; font-size: clamp(0.9rem, 3vw, 1rem); }
+        .install-subtitle { font-size: clamp(0.75rem, 2.5vw, 0.85rem); opacity: 0.9; }
+        .install-btn {
+            background: white;
+            color: #F28500;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .close-install {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        /* Main app (hidden initially) */
         .app-container {
             width: 100%;
             max-width: 1400px;
@@ -138,42 +180,6 @@
             padding: 10px 24px;
             border-radius: 40px;
             font-weight: 600;
-            cursor: pointer;
-        }
-        /* Install prompt - now inside app container */
-        .install-prompt {
-            background: linear-gradient(135deg, #F28500, #D6CB8D);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .install-text {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .install-icon { font-size: 2rem; }
-        .install-title { font-weight: 600; font-size: clamp(0.9rem, 3vw, 1rem); }
-        .install-subtitle { font-size: clamp(0.75rem, 2.5vw, 0.85rem); opacity: 0.9; }
-        .install-btn {
-            background: white;
-            color: #F28500;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .close-install {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
             cursor: pointer;
         }
         .data-status {
@@ -462,6 +468,19 @@
         <div id="loginError" class="error-msg"></div>
     </div>
 
+    <!-- Install Prompt (shown below login card when not in standalone mode) -->
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-text">
+            <span class="install-icon">📱</span>
+            <div>
+                <div class="install-title">Install ConstructPro</div>
+                <div class="install-subtitle">Add to home screen for app-like experience</div>
+            </div>
+        </div>
+        <button class="install-btn" id="installBtn">Install</button>
+        <button class="close-install" id="closeInstall">✕</button>
+    </div>
+
     <!-- Main App -->
     <div id="appMain" class="app-container">
         <div class="header">
@@ -470,19 +489,6 @@
                 <button class="nav-btn" id="goToAnalytics">📊 Analytics</button>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
-        </div>
-
-        <!-- Install Prompt (now inside app container) -->
-        <div id="installPrompt" class="install-prompt" style="display: none;">
-            <div class="install-text">
-                <span class="install-icon">📱</span>
-                <div>
-                    <div class="install-title">Install ConstructPro</div>
-                    <div class="install-subtitle">Add to home screen for app-like experience</div>
-                </div>
-            </div>
-            <button class="install-btn" id="installBtn">Install</button>
-            <button class="close-install" id="closeInstall">✕</button>
         </div>
 
         <div class="data-status" id="dataStatusBanner" style="display: none;">
@@ -514,9 +520,11 @@
             <label style="font-weight: 600; font-size: clamp(0.8rem, 3vw, 0.95rem);">📦 Quotation items (name, quantity, unit price)</label>
             <div class="items-table-wrapper">
                 <table class="items-table" id="itemsTable">
-                    <thead><tr><th>Item name</th><th>Qty</th><th>Unit price ($)</th><th>Line total</th><th></th></thead>
+                    <thead>*
+                        <th>Item name</th><th>Qty</th><th>Unit price ($)</th><th>Line total</th><th></th>
+                    </thead>
                     <tbody id="itemsBody"></tbody>
-                </table>
+                 </table>
             </div>
             <button class="add-item-btn" id="addItemBtn">➕ Add item</button>
             <div class="quotation-preview" id="quotationPreview">battery-4-23000, solar-6-345000</div>
@@ -559,7 +567,7 @@
         <!-- Records Table -->
         <div class="records-table-wrapper">
             <table class="records-table" id="recordsTable">
-                <thead>*
+                <thead>
                     <th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th><th>Quote</th><th>Payment</th><th>Material</th><th>Check</th><th>Date</th><th>Transport</th><th>Other</th><th>Expenses</th><th>Profit</th><th>Actions</th>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -580,11 +588,16 @@
         const installBtn = document.getElementById('installBtn');
         const closeInstall = document.getElementById('closeInstall');
 
-        // Only show prompt after login and if not in standalone mode
+        // Show install prompt on login screen if not in standalone mode
         function maybeShowInstallPrompt() {
             if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
                 installPrompt.style.display = 'flex';
             }
+        }
+
+        // Hide install prompt after login
+        function hideInstallPrompt() {
+            installPrompt.style.display = 'none';
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -592,6 +605,7 @@
             deferredPrompt = e;
             maybeShowInstallPrompt();
         });
+
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
                 alert('To install: Tap Share button → "Add to Home Screen"');
@@ -600,9 +614,13 @@
             deferredPrompt.prompt();
             await deferredPrompt.userChoice;
             deferredPrompt = null;
-            installPrompt.style.display = 'none';
+            hideInstallPrompt();
         });
-        closeInstall.addEventListener('click', () => installPrompt.style.display = 'none');
+
+        closeInstall.addEventListener('click', () => hideInstallPrompt());
+
+        // Show prompt on page load (if not installed)
+        maybeShowInstallPrompt();
 
         // Global state
         let records = [];
@@ -876,7 +894,7 @@
         if (sessionStorage.getItem('auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appMain').style.display = 'flex';
-            maybeShowInstallPrompt();
+            hideInstallPrompt();
             fetchRecords();
         }
         document.getElementById('loginBtn').addEventListener('click', () => {
@@ -885,7 +903,7 @@
                 sessionStorage.setItem('auth', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appMain').style.display = 'flex';
-                maybeShowInstallPrompt();
+                hideInstallPrompt();
                 fetchRecords();
             } else {
                 document.getElementById('loginError').innerText = 'Incorrect password';
