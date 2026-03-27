@@ -140,6 +140,7 @@
             font-weight: 600;
             cursor: pointer;
         }
+        /* Install prompt - now inside app container */
         .install-prompt {
             background: linear-gradient(135deg, #F28500, #D6CB8D);
             color: white;
@@ -150,7 +151,6 @@
             justify-content: space-between;
             gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 1.5rem;
         }
         .install-text {
             display: flex;
@@ -454,19 +454,6 @@
     </style>
 </head>
 <body>
-    <!-- Install Prompt -->
-    <div id="installPrompt" class="install-prompt" style="display: none;">
-        <div class="install-text">
-            <span class="install-icon">📱</span>
-            <div>
-                <div class="install-title">Install ConstructPro</div>
-                <div class="install-subtitle">Add to home screen for app-like experience</div>
-            </div>
-        </div>
-        <button class="install-btn" id="installBtn">Install</button>
-        <button class="close-install" id="closeInstall">✕</button>
-    </div>
-
     <!-- Login Screen -->
     <div id="loginScreen" class="login-wrapper">
         <h2>🔐 CONSTRUCT PRO</h2>
@@ -483,6 +470,19 @@
                 <button class="nav-btn" id="goToAnalytics">📊 Analytics</button>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
+        </div>
+
+        <!-- Install Prompt (now inside app container) -->
+        <div id="installPrompt" class="install-prompt" style="display: none;">
+            <div class="install-text">
+                <span class="install-icon">📱</span>
+                <div>
+                    <div class="install-title">Install ConstructPro</div>
+                    <div class="install-subtitle">Add to home screen for app-like experience</div>
+                </div>
+            </div>
+            <button class="install-btn" id="installBtn">Install</button>
+            <button class="close-install" id="closeInstall">✕</button>
         </div>
 
         <div class="data-status" id="dataStatusBanner" style="display: none;">
@@ -514,7 +514,7 @@
             <label style="font-weight: 600; font-size: clamp(0.8rem, 3vw, 0.95rem);">📦 Quotation items (name, quantity, unit price)</label>
             <div class="items-table-wrapper">
                 <table class="items-table" id="itemsTable">
-                    <thead><tr><th>Item name</th><th>Qty</th><th>Unit price ($)</th><th>Line total</th><th></th></tr></thead>
+                    <thead><tr><th>Item name</th><th>Qty</th><th>Unit price ($)</th><th>Line total</th><th></th></thead>
                     <tbody id="itemsBody"></tbody>
                 </table>
             </div>
@@ -559,7 +559,9 @@
         <!-- Records Table -->
         <div class="records-table-wrapper">
             <table class="records-table" id="recordsTable">
-                <thead><tr><th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th><th>Quote</th><th>Payment</th><th>Material</th><th>Check</th><th>Date</th><th>Transport</th><th>Other</th><th>Expenses</th><th>Profit</th><th>Actions</th></tr></thead>
+                <thead>*
+                    <th>ID</th><th>Client</th><th>Address</th><th>Ref</th><th>Items</th><th>Quote</th><th>Payment</th><th>Material</th><th>Check</th><th>Date</th><th>Transport</th><th>Other</th><th>Expenses</th><th>Profit</th><th>Actions</th>
+                </thead>
                 <tbody id="tableBody"></tbody>
             </table>
         </div>
@@ -569,7 +571,7 @@
 
     <script>
         // ---------- CONFIG ----------
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec';
         const PASSWORD = '1001';
         
         // PWA Installation
@@ -578,13 +580,17 @@
         const installBtn = document.getElementById('installBtn');
         const closeInstall = document.getElementById('closeInstall');
 
-        if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
-            setTimeout(() => installPrompt.style.display = 'flex', 3000);
+        // Only show prompt after login and if not in standalone mode
+        function maybeShowInstallPrompt() {
+            if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+                installPrompt.style.display = 'flex';
+            }
         }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installPrompt.style.display = 'flex';
+            maybeShowInstallPrompt();
         });
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
@@ -647,20 +653,21 @@
             return itemsArr.filter(i => i.name && i.name.trim() !== '').map(i => `${i.name.trim()}-${i.quantity || 1}-${i.unitPrice || 0}`).join(',');
         };
         const lineTotal = (item) => (item.quantity || 0) * (item.unitPrice || 0);
-        const calculateQuoteTotal = () => items.reduce((acc, i) => acc + lineTotal(i), 0);
 
         function renderItemsTable() {
             const tbody = document.getElementById('itemsBody');
             let html = '';
             items.forEach((item, idx) => {
                 const total = lineTotal(item);
-                html += `<tr>
-                    <td><input type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
-                    <td><input type="number" value="${item.quantity || 1}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
-                    <td><input type="number" value="${item.unitPrice || 0}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
-                    <td>${formatMoney(total)}</td>
-                    <td><button class="remove-item-btn" data-index="${idx}">✖</button></td>
-                </tr>`;
+                html += `
+                    <tr>
+                        <td><input type="text" value="${(item.name || '').replace(/"/g, '&quot;')}" placeholder="item" data-index="${idx}" data-field="name" class="item-input"></td>
+                        <td><input type="number" value="${item.quantity || 1}" step="0.01" min="0" data-index="${idx}" data-field="quantity" class="item-input"></td>
+                        <td><input type="number" value="${item.unitPrice || 0}" step="0.01" min="0" data-index="${idx}" data-field="unitPrice" class="item-input"></td>
+                        <td>${formatMoney(total)}</td>
+                        <td><button class="remove-item-btn" data-index="${idx}">✖</button></td>
+                    </tr>
+                `;
             });
             tbody.innerHTML = html;
             document.querySelectorAll('.item-input').forEach(inp => {
@@ -795,23 +802,25 @@
                 totalPay += parseFloat(r.payment_amount) || 0;
                 totalProf += profitVal;
                 if (r.check_up === 'Yes') pending++;
-                html += `<tr>
-                    <td>${r.id || ''}</td>
-                    <td>${r.client_name || ''}</td>
-                    <td>${r.address || ''}</td>
-                    <td>${r.quotation_ref || ''}</td>
-                    <td>${tags}</td>
-                    <td>${formatMoney(r.quotation_total)}</td>
-                    <td>${formatMoney(r.payment_amount)}</td>
-                    <td>${formatMoney(r.material_cost)}</td>
-                    <td>${r.check_up || 'No'}</td>
-                    <td>${r.date || ''}</td>
-                    <td>${formatMoney(r.transport_cost)}</td>
-                    <td>${formatMoney(r.other_cost)}</td>
-                    <td>${formatMoney(r.total_expenses)}</td>
-                    <td class="${profitVal >= 0 ? 'profit' : 'loss'}">${formatMoney(profitVal)}</td>
-                    <td><button class="edit-btn" data-id="${r.id}">Edit</button> <button class="delete-btn" data-id="${r.id}">Del</button></td>
-                </tr>`;
+                html += `
+                    <tr>
+                        <td>${r.id || ''}</td>
+                        <td>${r.client_name || ''}</td>
+                        <td>${r.address || ''}</td>
+                        <td>${r.quotation_ref || ''}</td>
+                        <td>${tags}</td>
+                        <td>${formatMoney(r.quotation_total)}</td>
+                        <td>${formatMoney(r.payment_amount)}</td>
+                        <td>${formatMoney(r.material_cost)}</td>
+                        <td>${r.check_up || 'No'}</td>
+                        <td>${r.date || ''}</td>
+                        <td>${formatMoney(r.transport_cost)}</td>
+                        <td>${formatMoney(r.other_cost)}</td>
+                        <td>${formatMoney(r.total_expenses)}</td>
+                        <td class="${profitVal >= 0 ? 'profit' : 'loss'}">${formatMoney(profitVal)}</td>
+                        <td><button class="edit-btn" data-id="${r.id}">Edit</button> <button class="delete-btn" data-id="${r.id}">Del</button></td>
+                    </tr>
+                `;
             });
             tbody.innerHTML = html || '<tr><td colspan="15" style="text-align:center;padding:2rem;">No records found</td></tr>';
             document.getElementById('totalRecords').innerText = records.length;
@@ -867,6 +876,7 @@
         if (sessionStorage.getItem('auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appMain').style.display = 'flex';
+            maybeShowInstallPrompt();
             fetchRecords();
         }
         document.getElementById('loginBtn').addEventListener('click', () => {
@@ -875,6 +885,7 @@
                 sessionStorage.setItem('auth', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appMain').style.display = 'flex';
+                maybeShowInstallPrompt();
                 fetchRecords();
             } else {
                 document.getElementById('loginError').innerText = 'Incorrect password';
