@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     
-    <!-- CRITICAL PWA Meta Tags - These force full-screen mode -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ConstructPro Analytics">
@@ -12,1480 +11,250 @@
     <meta name="theme-color" content="#F28500">
     <meta name="description" content="Construction Company Analytics">
     
-    <!-- Additional iOS specific meta -->
-    <meta name="format-detection" content="telephone=no">
-    
-    <!-- PWA Icons -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E">
     
-    <!-- Manifest for Android -->
-    <link rel="manifest" href="data:application/manifest+json,{
-        &quot;name&quot;: &quot;ConstructPro Analytics&quot;,
-        &quot;short_name&quot;: &quot;Analytics&quot;,
-        &quot;start_url&quot;: &quot;.&quot;,
-        &quot;display&quot;: &quot;standalone&quot;,
-        &quot;background_color&quot;: &quot;#F28500&quot;,
-        &quot;theme_color&quot;: &quot;#F28500&quot;,
-        &quot;icons&quot;: [{
-            &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F28500'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white' font-family='Arial'%3E📊%3C/text%3E%3C/svg%3E&quot;,
-            &quot;sizes&quot;: &quot;192x192&quot;,
-            &quot;type&quot;: &quot;image/svg+xml&quot;
-        }]
-    }">
-    
-    <title>ConstructPro · Analytics Dashboard</title>
+    <title>ConstructPro · Analytics</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
-        
-        body {
-            background: #f5f5f5;
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            padding: 20px;
-        }
-        
-        /* CRITICAL: Full-screen mode styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #f5f5f5; min-height: 100vh; min-height: -webkit-fill-available; padding: 20px; }
         @media all and (display-mode: standalone) {
-            body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
-                background-color: #f5f5f5;
-            }
-            
-            /* Remove any browser-like decorations */
-            .dashboard-container {
-                width: 100%;
-                height: 100vh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-            
-            /* Add drag handle for iOS */
-            .header {
-                -webkit-app-region: drag;
-                padding-top: max(1rem, env(safe-area-inset-top));
-            }
-            
-            .header button {
-                -webkit-app-region: no-drag;
-            }
-            
-            /* Hide any browser UI */
-            html, body {
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            
-            /* Custom scrollbar for app feel */
-            ::-webkit-scrollbar {
-                width: 6px;
-            }
-            
-            ::-webkit-scrollbar-thumb {
-                background: #F28500;
-                border-radius: 10px;
-            }
+            body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+            .header { -webkit-app-region: drag; padding-top: max(1rem, env(safe-area-inset-top)); }
+            .header button { -webkit-app-region: no-drag; }
         }
-        
-        /* Install guide banner - only shows in browser mode */
-        .install-guide {
-            background: linear-gradient(135deg, #F28500, #D6CB8D);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 32px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
-        }
-        
-        .install-guide-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .install-guide-steps {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 15px 0;
-        }
-        
-        .step {
-            flex: 1 1 200px;
-            background: rgba(255,255,255,0.2);
-            padding: 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background: white;
-            color: #F28500;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 24px;
-            font-weight: 700;
-            margin-right: 8px;
-        }
-        
-        .install-guide.hidden {
-            display: none;
-        }
-        
-        @media all and (display-mode: standalone) {
-            .install-guide {
-                display: none !important;
-            }
-        }
-        
-        /* login screen */
         .login-wrapper {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            border-radius: 28px;
+            width: 100%; max-width: 400px; background: white; border-radius: 28px;
+            padding: 2rem 1.5rem; text-align: center; margin: 50px auto;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2);
-            padding: 2rem 1.5rem;
-            text-align: center;
-            margin: 50px auto;
         }
-        .login-wrapper h2 {
-            color: #F28500;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            font-size: clamp(1.5rem, 6vw, 2rem);
-        }
-        .login-wrapper input {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 50px;
-            margin-bottom: 1rem;
-            outline: none;
-        }
-        .login-wrapper input:focus {
-            border-color: #F28500;
-        }
-        .login-wrapper button {
-            width: 100%;
-            padding: 16px;
-            background: #F28500;
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-weight: 700;
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            cursor: pointer;
-        }
-        .error-msg {
-            color: #b00020;
-            margin-top: 0.5rem;
-        }
-
-        /* main dashboard container */
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: none;
-        }
-        
-        /* Install prompt banner */
+        .login-wrapper h2 { color: #F28500; font-weight: 600; margin-bottom: 1.5rem; font-size: clamp(1.5rem,6vw,2rem); }
+        .login-wrapper input { width: 100%; padding: 16px; font-size: 16px; border: 2px solid #e0e0e0; border-radius: 50px; margin-bottom: 1rem; outline: none; }
+        .login-wrapper button { width: 100%; padding: 16px; background: #F28500; border: none; border-radius: 50px; color: white; font-weight: 700; cursor: pointer; }
+        .error-msg { color: #b00020; margin-top: 0.5rem; }
+        .dashboard-container { max-width: 1400px; margin: 0 auto; display: none; }
         .install-prompt {
-            background: linear-gradient(135deg, #F28500, #D6CB8D);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-            box-shadow: 0 8px 20px rgba(242, 133, 0, 0.3);
-            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg,#F28500,#D6CB8D); color: white; padding: 1rem 1.5rem; border-radius: 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; margin-bottom: 1.5rem;
         }
-        .install-text {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .install-icon {
-            font-size: 2rem;
-        }
-        .install-title {
-            font-weight: 600;
-            font-size: clamp(0.9rem, 3vw, 1rem);
-        }
-        .install-subtitle {
-            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
-            opacity: 0.9;
-        }
-        .install-btn {
-            background: white;
-            color: #F28500;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .close-install {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-        
-        /* header */
+        .install-text { display: flex; align-items: center; gap: 10px; }
+        .install-icon { font-size: 2rem; }
+        .install-title { font-weight: 600; font-size: clamp(0.9rem,3vw,1rem); }
+        .install-subtitle { font-size: clamp(0.75rem,2.5vw,0.85rem); opacity: 0.9; }
+        .install-btn { background: white; color: #F28500; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 700; cursor: pointer; }
+        .close-install { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
         .header {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 40px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 6px 14px #00000010;
-            gap: 15px;
+            background: white; padding: 1rem 1.5rem; border-radius: 40px; display: flex; flex-wrap: wrap;
+            align-items: center; justify-content: space-between; margin-bottom: 1.5rem; box-shadow: 0 6px 14px #00000010; gap: 15px;
         }
-        .header h1 {
-            color: #F28500;
-            font-size: clamp(1.4rem, 5vw, 1.8rem);
-            font-weight: 600;
-        }
-        .header .subtitle {
-            color: #666;
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-        }
-        .header-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .nav-btn {
-            background: #D6CB8D;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            color: #2d2d2d;
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-            white-space: nowrap;
-        }
-        .logout-btn {
-            background: #F28500;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
-        /* data status banner */
-        .data-status {
-            background: #fff3e0;
-            border-left: 8px solid #F28500;
-            padding: 1rem 1.5rem;
-            border-radius: 32px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .status-icon {
-            font-size: 2rem;
-        }
-        .status-text {
-            flex: 1;
-            min-width: 200px;
-        }
-        .status-text h3 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: clamp(1rem, 4vw, 1.2rem);
-        }
-        .status-text p {
-            color: #666;
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-        }
-        .refresh-btn {
-            background: #F28500;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
-        /* date range selector */
-        .date-range {
-            background: white;
-            padding: 1.2rem;
-            border-radius: 32px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .date-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        .date-controls input {
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 30px;
-            font-size: 14px;
-            width: auto;
-            min-width: 130px;
-        }
-        .date-controls button {
-            padding: 12px 24px;
-            background: #F28500;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-        }
-        .quick-stats {
-            display: flex;
-            gap: 20px;
-            color: #666;
-            flex-wrap: wrap;
-        }
-        .quick-stats span {
-            font-size: clamp(0.8rem, 3vw, 0.95rem);
-            white-space: nowrap;
-        }
-        
-        /* KPI cards */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 1.5rem;
-        }
-        .kpi-card {
-            background: white;
-            border-radius: 28px;
-            padding: 1.2rem 1rem;
-            box-shadow: 0 8px 18px -8px #00000020;
-            overflow: hidden;
-        }
-        .kpi-title {
-            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .kpi-value {
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            font-weight: 700;
-            color: #1e1e1e;
-            line-height: 1.2;
-            word-break: break-word;
-        }
-        
-        /* upcoming check-ups section */
-        .checkups-section {
-            background: white;
-            border-radius: 32px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 8px 18px -8px #00000020;
-            border-left: 8px solid #F28500;
-        }
-        .checkups-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .checkups-title {
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .checkups-count {
-            background: #F28500;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-        }
-        .checkups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-        .checkup-card {
-            background: #f8f9fa;
-            border-radius: 24px;
-            padding: 1.2rem;
-            border: 1px solid #e0e0e0;
-            transition: transform 0.2s;
-        }
-        .checkup-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .checkup-client {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #F28500;
-            margin-bottom: 5px;
-        }
-        .checkup-details {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin: 10px 0;
-        }
-        .checkup-detail {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .checkup-date {
-            display: inline-block;
-            background: #F2850010;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #F28500;
-            font-weight: 600;
-        }
-        .checkup-urgent {
-            background: #ffebee;
-            color: #c62828;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        .no-checkups {
-            text-align: center;
-            padding: 2rem;
-            color: #999;
-            font-style: italic;
-        }
-        
-        /* charts grid */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 1.5rem;
-        }
-        .chart-card {
-            background: white;
-            border-radius: 32px;
-            padding: 1.2rem;
-            box-shadow: 0 8px 18px -8px #00000020;
-        }
-        .chart-title {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        .chart-container {
-            height: 250px;
-            position: relative;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 300px;
-            }
-        }
-        
-        /* tables section */
-        .tables-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 1.5rem;
-        }
-        .table-card {
-            background: white;
-            border-radius: 32px;
-            padding: 1.2rem;
-            box-shadow: 0 8px 18px -8px #00000020;
-            overflow-x: auto;
-        }
-        .table-title {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 280px;
-        }
-        .ranking-table th {
-            text-align: left;
-            padding: 12px 8px;
-            background: #f8f8f8;
-            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-            color: #666;
-            white-space: nowrap;
-        }
-        .ranking-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #eee;
-            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-            word-break: break-word;
-        }
+        .header h1 { color: #F28500; font-size: clamp(1.4rem,5vw,1.8rem); font-weight: 600; }
+        .header .subtitle { color: #666; font-size: clamp(0.8rem,3vw,0.9rem); }
+        .header-right { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .nav-btn, .logout-btn { padding: 10px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .nav-btn { background: #D6CB8D; color: #2d2d2d; border: none; }
+        .logout-btn { background: #F28500; color: white; border: none; }
+        .data-status { background: #fff3e0; border-left: 8px solid #F28500; padding: 1rem 1.5rem; border-radius: 32px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .status-icon { font-size: 2rem; }
+        .status-text { flex: 1; min-width: 200px; }
+        .status-text h3 { font-size: clamp(1rem,4vw,1.2rem); margin-bottom: 5px; }
+        .status-text p { font-size: clamp(0.8rem,3vw,0.9rem); color: #666; }
+        .refresh-btn { background: #F28500; color: white; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; }
+        .date-range { background: white; padding: 1.2rem; border-radius: 32px; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; }
+        .date-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .date-controls input { padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 30px; font-size: 14px; min-width: 130px; }
+        .date-controls button { padding: 12px 24px; background: #F28500; color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; }
+        .quick-stats { display: flex; gap: 20px; color: #666; flex-wrap: wrap; }
+        .quick-stats span { font-size: clamp(0.8rem,3vw,0.95rem); white-space: nowrap; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 1.5rem; }
+        .kpi-card { background: white; border-radius: 28px; padding: 1.2rem 1rem; box-shadow: 0 8px 18px -8px #00000020; }
+        .kpi-title { font-size: clamp(0.7rem,2.5vw,0.9rem); color: #666; text-transform: uppercase; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .kpi-value { font-size: clamp(1.2rem,4vw,2rem); font-weight: 700; color: #1e1e1e; line-height: 1.2; word-break: break-word; }
+        .checkups-section { background: white; border-radius: 32px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 18px -8px #00000020; border-left: 8px solid #F28500; }
+        .checkups-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+        .checkups-title { font-size: clamp(1rem,4vw,1.2rem); font-weight: 600; color: #333; display: flex; align-items: center; gap: 8px; }
+        .checkups-count { background: #F28500; color: white; padding: 4px 12px; border-radius: 30px; font-size: 0.9rem; }
+        .checkups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .checkup-card { background: #f8f9fa; border-radius: 24px; padding: 1.2rem; border: 1px solid #e0e0e0; transition: transform 0.2s; }
+        .checkup-client { font-weight: 700; font-size: 1.1rem; color: #F28500; margin-bottom: 5px; }
+        .checkup-details { display: flex; flex-direction: column; gap: 5px; margin: 10px 0; }
+        .checkup-detail { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #666; }
+        .checkup-date { display: inline-block; background: #F2850010; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; color: #F28500; font-weight: 600; }
+        .checkup-urgent { background: #ffebee; color: #c62828; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-left: 8px; }
+        .no-checkups { text-align: center; padding: 2rem; color: #999; font-style: italic; }
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 1.5rem; }
+        .chart-card { background: white; border-radius: 32px; padding: 1.2rem; box-shadow: 0 8px 18px -8px #00000020; }
+        .chart-title { font-size: clamp(0.9rem,3vw,1.1rem); font-weight: 600; margin-bottom: 1rem; color: #333; }
+        .chart-container { height: 250px; position: relative; }
+        @media (min-width:768px) { .chart-container { height: 300px; } }
+        .tables-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 1.5rem; }
+        .table-card { background: white; border-radius: 32px; padding: 1.2rem; box-shadow: 0 8px 18px -8px #00000020; overflow-x: auto; }
+        .table-title { font-size: clamp(0.9rem,3vw,1.1rem); font-weight: 600; margin-bottom: 1rem; }
+        .ranking-table { width: 100%; border-collapse: collapse; min-width: 280px; }
+        .ranking-table th { text-align: left; padding: 12px 8px; background: #f8f8f8; font-size: clamp(0.7rem,2.5vw,0.85rem); color: #666; white-space: nowrap; }
+        .ranking-table td { padding: 10px 8px; border-bottom: 1px solid #eee; font-size: clamp(0.7rem,2.5vw,0.9rem); word-break: break-word; }
         .profit { color: #0f7b3a; }
         .loss { color: #b13e3e; }
-        
-        /* no data placeholder */
-        .no-data {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: #999;
-            font-style: italic;
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-        }
-        
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #F28500;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
+        .no-data { text-align: center; padding: 2rem 1rem; color: #999; font-style: italic; }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #F28500; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
-        }
-        .toast {
-            background: white;
-            padding: 16px 24px;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            margin-top: 10px;
-            font-weight: 500;
-            border-left: 8px solid;
-            animation: slide 0.2s;
-            max-width: 90vw;
-            word-break: break-word;
-            font-size: clamp(0.8rem, 3vw, 0.95rem);
-        }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 999; }
+        .toast { background: white; padding: 16px 24px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 10px; font-weight: 500; border-left: 8px solid; animation: slide 0.2s; max-width: 90vw; }
         .toast.success { border-color: #0f7b3a; }
         .toast.error { border-color: #b13e3e; }
         .toast.info { border-color: #F28500; }
         @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        
-        /* Responsive for very small screens */
-        @media (max-width: 480px) {
+        @media (max-width:480px) {
             body { padding: 10px; }
             .header { flex-direction: column; text-align: center; }
             .header-right { width: 100%; justify-content: center; }
-            .nav-btn, .logout-btn { flex: 1; text-align: center; }
             .date-controls { flex-direction: column; width: 100%; }
-            .date-controls input { width: 100%; }
-            .date-controls button { width: 100%; }
-            .quick-stats { justify-content: center; }
+            .date-controls input, .date-controls button { width: 100%; }
             .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-            .kpi-card { padding: 1rem 0.8rem; }
-            .kpi-value { font-size: 1.2rem; }
             .checkups-grid { grid-template-columns: 1fr; }
         }
-        
-        canvas {
-            max-width: 100%;
-            height: auto !important;
-        }
+        @media all and (display-mode: standalone) { .install-prompt { display: none !important; } }
+        canvas { max-width: 100%; height: auto !important; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <!-- Install Guide - Shows when in browser mode -->
-    <div id="installGuide" class="install-guide">
-        <div class="install-guide-title">
-            <span>📱</span> Install as App for Full-Screen Experience
-        </div>
-        <div class="install-guide-steps">
-            <div class="step">
-                <span class="step-number">1</span> Tap Share 
-                <span style="font-size: 1.2rem;">⬆️</span>
-            </div>
-            <div class="step">
-                <span class="step-number">2</span> Scroll down
-            </div>
-            <div class="step">
-                <span class="step-number">3</span> Tap "Add to Home Screen"
-            </div>
-            <div class="step">
-                <span class="step-number">4</span> Tap "Add"
-            </div>
-        </div>
-        <div style="font-size: 0.9rem; opacity: 0.9;">
-            Then open from home screen - no browser UI!
-        </div>
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-text"><span class="install-icon">📱</span><div><div class="install-title">Install Analytics Dashboard</div><div class="install-subtitle">Add to home screen for app-like experience</div></div></div>
+        <button class="install-btn" id="installBtn">Install</button>
+        <button class="close-install" id="closeInstall">✕</button>
     </div>
-
-    <!-- login screen -->
     <div id="loginScreen" class="login-wrapper">
         <h2>📊 ANALYTICS DASHBOARD</h2>
         <input type="password" id="passwordInput" placeholder="enter password" inputmode="numeric">
         <button id="loginBtn">ACCESS DASHBOARD</button>
         <div id="loginError" class="error-msg"></div>
     </div>
-
-    <!-- main dashboard -->
     <div id="dashboardMain" class="dashboard-container">
         <div class="header">
-            <div>
-                <h1>📊 ConstructPro Analytics</h1>
-                <div class="subtitle" id="dataSummary">Loading data...</div>
-            </div>
-            <div class="header-right">
-                <button class="nav-btn" id="backToMainBtn">← Main App</button>
-                <button class="logout-btn" id="logoutBtn">Logout</button>
-            </div>
+            <div><h1>📊 ConstructPro Analytics</h1><div class="subtitle" id="dataSummary">Loading data...</div></div>
+            <div class="header-right"><button class="nav-btn" id="backToMainBtn">← Main App</button><button class="logout-btn" id="logoutBtn">Logout</button></div>
         </div>
-
-        <!-- data status banner -->
         <div class="data-status" id="dataStatusBanner">
-            <div class="status-icon">📊</div>
-            <div class="status-text">
-                <h3 id="statusTitle">Loading data from Google Sheets...</h3>
-                <p id="statusMessage">Please wait while we fetch your business data</p>
-            </div>
+            <div class="status-icon">📊</div><div class="status-text"><h3 id="statusTitle">Loading data from Google Sheets...</h3><p id="statusMessage">Please wait...</p></div>
             <button class="refresh-btn" id="refreshData">🔄 Refresh</button>
         </div>
-
-        <!-- date range selector -->
         <div class="date-range">
-            <div class="date-controls">
-                <input type="date" id="startDate">
-                <span>to</span>
-                <input type="date" id="endDate">
-                <button id="applyDateFilter">Apply</button>
-                <button id="resetDateFilter" style="background: #e0e0e0; color: #333;">Reset</button>
-            </div>
-            <div class="quick-stats" id="dateRangeStats">
-                <span>📅 <span id="periodDays">0</span> records</span>
-                <span>💰 <span id="periodRevenue">₦0</span></span>
-                <span>📈 <span id="periodProfit">₦0</span></span>
-            </div>
+            <div class="date-controls"><input type="date" id="startDate"><span>to</span><input type="date" id="endDate"><button id="applyDateFilter">Apply</button><button id="resetDateFilter" style="background:#e0e0e0;color:#333;">Reset</button></div>
+            <div class="quick-stats"><span>📅 <span id="periodDays">0</span> records</span><span>💰 <span id="periodRevenue">$0</span></span><span>📈 <span id="periodProfit">$0</span></span></div>
         </div>
-
-        <!-- KPI cards -->
-        <div class="kpi-grid" id="kpiCards">
-            <div class="kpi-card">
-                <div class="kpi-title">Total Revenue</div>
-                <div class="kpi-value" id="totalRevenue">₦0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Net Profit</div>
-                <div class="kpi-value" id="netProfit">₦0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Profit Margin</div>
-                <div class="kpi-value" id="profitMargin">0%</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Total Projects</div>
-                <div class="kpi-value" id="totalProjects">0</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Check-up Rate</div>
-                <div class="kpi-value" id="checkupRate">0%</div>
-            </div>
+        <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-title">Total Revenue</div><div class="kpi-value" id="totalRevenue">$0</div></div>
+            <div class="kpi-card"><div class="kpi-title">Net Profit</div><div class="kpi-value" id="netProfit">$0</div></div>
+            <div class="kpi-card"><div class="kpi-title">Profit Margin</div><div class="kpi-value" id="profitMargin">0%</div></div>
+            <div class="kpi-card"><div class="kpi-title">Total Projects</div><div class="kpi-value" id="totalProjects">0</div></div>
+            <div class="kpi-card"><div class="kpi-title">Check-up Rate</div><div class="kpi-value" id="checkupRate">0%</div></div>
         </div>
-
-        <!-- UPCOMING CHECK-UPS SECTION -->
-        <div class="checkups-section" id="checkupsSection">
-            <div class="checkups-header">
-                <div class="checkups-title">
-                    <span>🔧 Upcoming Check-ups</span>
-                    <span class="checkups-count" id="upcomingCheckupsCount">0</span>
-                </div>
-                <div class="checkups-filter">
-                    <select id="checkupsFilter" style="padding: 8px 16px; border-radius: 30px; border: 1px solid #ddd;">
-                        <option value="7">Next 7 days</option>
-                        <option value="14">Next 14 days</option>
-                        <option value="30" selected>Next 30 days</option>
-                        <option value="90">Next 90 days</option>
-                        <option value="all">All upcoming</option>
-                    </select>
-                </div>
-            </div>
-            <div id="checkupsContainer" class="checkups-grid">
-                <!-- Check-ups will be dynamically inserted here -->
-                <div class="no-checkups">No upcoming check-ups scheduled</div>
-            </div>
-        </div>
-
-        <!-- charts -->
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">Revenue vs Profit Trend</div>
-                <div class="chart-container">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Top Items by Revenue</div>
-                <div class="chart-container">
-                    <canvas id="itemsChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">Project Profit Distribution</div>
-                <div class="chart-container">
-                    <canvas id="distributionChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Monthly Performance</div>
-                <div class="chart-container">
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- rankings and tables -->
-        <div class="tables-section">
-            <div class="table-card">
-                <div class="table-title">🏆 Top Clients by Revenue</div>
-                <table class="ranking-table" id="topClientsTable">
-                    <thead>
-                        <tr><th>Client</th><th>Projects</th><th>Revenue</th><th>Profit</th></tr>
-                    </thead>
-                    <tbody id="topClientsBody"></tbody>
-                </table>
-            </div>
-            <div class="table-card">
-                <div class="table-title">📦 Most Used Items</div>
-                <table class="ranking-table" id="topItemsTable">
-                    <thead>
-                        <tr><th>Item</th><th>Used</th><th>Revenue</th><th>Avg. Price</th></tr>
-                    </thead>
-                    <tbody id="topItemsBody"></tbody>
-                </table>
-            </div>
-        </div>
+        <div class="checkups-section"><div class="checkups-header"><div class="checkups-title"><span>🔧 Upcoming Check-ups</span><span class="checkups-count" id="upcomingCheckupsCount">0</span></div><div><select id="checkupsFilter" style="padding:8px 16px;border-radius:30px;border:1px solid #ddd;"><option value="7">Next 7 days</option><option value="14">Next 14 days</option><option value="30" selected>Next 30 days</option><option value="90">Next 90 days</option><option value="all">All upcoming</option></select></div></div><div id="checkupsContainer" class="checkups-grid"><div class="no-checkups">No upcoming check-ups scheduled</div></div></div>
+        <div class="charts-grid"><div class="chart-card"><div class="chart-title">Revenue vs Profit Trend</div><div class="chart-container"><canvas id="revenueChart"></canvas></div></div><div class="chart-card"><div class="chart-title">Top Items by Revenue</div><div class="chart-container"><canvas id="itemsChart"></canvas></div></div></div>
+        <div class="charts-grid"><div class="chart-card"><div class="chart-title">Project Profit Distribution</div><div class="chart-container"><canvas id="distributionChart"></canvas></div></div><div class="chart-card"><div class="chart-title">Monthly Performance</div><div class="chart-container"><canvas id="monthlyChart"></canvas></div></div></div>
+        <div class="tables-section"><div class="table-card"><div class="table-title">🏆 Top Clients by Revenue</div><table class="ranking-table"><thead><tr><th>Client</th><th>Projects</th><th>Revenue</th><th>Profit</th></tr></thead><tbody id="topClientsBody"></tbody></table></div><div class="table-card"><div class="table-title">📦 Most Used Items</div><table class="ranking-table"><thead><tr><th>Item</th><th>Used</th><th>Revenue</th><th>Avg. Price</th></tr></thead><tbody id="topItemsBody"></tbody></table></div></div>
     </div>
-
-    <!-- toast container -->
     <div id="toastContainer" class="toast-container"></div>
-
     <script>
-        (function() {
-            // ---------- CONFIG ----------
-            const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec'; // <-- REPLACE WITH DEPLOYED URL
-            const PASSWORD = '1001';
-            
-            // ---------- PWA Detection and Guide ----------
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                                window.navigator.standalone === true;
-            
-            const installGuide = document.getElementById('installGuide');
-            
-            if (isStandalone) {
-                // In app mode - hide guide
-                installGuide.style.display = 'none';
-                document.body.classList.add('pwa-mode');
-            } else {
-                // In browser - show guide
-                installGuide.style.display = 'block';
-                
-                // Check if it's file protocol (local file)
-                if (window.location.protocol === 'file:') {
-                    const guideHtml = installGuide.innerHTML;
-                    installGuide.innerHTML = `
-                        <div class="install-guide-title" style="color: #ffebee;">
-                            ⚠️ Running from local files
-                        </div>
-                        <div style="margin: 10px 0;">
-                            For true app experience:
-                            <br>1. Upload to a web server OR
-                            <br>2. Add to Home Screen (will still work)
-                        </div>
-                        ${guideHtml}
-                    `;
-                }
-            }
-            
-            // Force standalone detection on iOS
-            if (window.navigator.standalone) {
-                document.documentElement.classList.add('ios-pwa');
-            }
-            
-            // ---------- Global state ----------
-            let allRecords = [];
-            let filteredRecords = [];
-            let charts = {};
-            
-            // ---------- Navigation ----------
-            document.getElementById('backToMainBtn').addEventListener('click', () => {
-                if (window.location.protocol === 'file:') {
-                    const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-                    window.location.href = currentPath + 'index.html';
-                } else {
-                    window.location.href = 'index.html';
-                }
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwdBhTqQXJphMNyzMyoYGwUQQBEHZh_eUltpTQ0PXlRgC_rgDmbeJ7awOZXODDiMTRGtw/exec';
+        const PASSWORD = '1001';
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) setTimeout(()=>installPrompt.style.display='flex',3000);
+        window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;installPrompt.style.display='flex';});
+        document.getElementById('installBtn')?.addEventListener('click',async()=>{if(!deferredPrompt){alert('To install: Tap Share → "Add to Home Screen"');return;}deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installPrompt.style.display='none';});
+        document.getElementById('closeInstall')?.addEventListener('click',()=>installPrompt.style.display='none');
+        let allRecords=[], filteredRecords=[], charts={};
+        const formatMoney=(val)=>{const num=Number(val)||0;return '$'+num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g,'$&,');};
+        const parseItemsFromString=(str)=>{if(!str||str==='null'||str==='undefined')return [];try{return str.split(',').map(s=>{const parts=s.trim().split('-');return{name:parts[0]||'Unknown',quantity:parseFloat(parts[1])||0,unitPrice:parseFloat(parts[2])||0};}).filter(i=>i.name&&i.name!=='');}catch(e){return [];}};
+        const toast=(msg,type='info')=>{const c=document.getElementById('toastContainer');const e=document.createElement('div');e.className=`toast ${type}`;e.innerText=msg;c.appendChild(e);setTimeout(()=>e.remove(),3500);};
+        const showLoader=(show)=>{let l=document.getElementById('globalLoader');if(!l){l=document.createElement('div');l.id='globalLoader';l.className='loader';l.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10000';document.body.appendChild(l);}l.style.display=show?'block':'none';};
+        async function fetchData(){
+            showLoader(true);
+            document.getElementById('statusTitle').innerText='Loading data...';
+            document.getElementById('statusMessage').innerText='Connecting to Google Sheets...';
+            try{
+                const res=await fetch(`${API_URL}?action=getAll`);
+                const data=await res.json();
+                if(data.records&&Array.isArray(data.records)){
+                    allRecords=data.records.map(r=>({...r,parsedItems:parseItemsFromString(r.quotation_details),profit:parseFloat(r.profit)||0,payment_amount:parseFloat(r.payment_amount)||0,quotation_total:parseFloat(r.quotation_total)||0,material_cost:parseFloat(r.material_cost)||0,transport_cost:parseFloat(r.transport_cost)||0,other_cost:parseFloat(r.other_cost)||0}));
+                    toast(`Loaded ${allRecords.length} records`,'success');
+                }else{allRecords=[];toast('No records found','info');}
+            }catch(e){allRecords=[];toast('Connection error','error');document.getElementById('statusTitle').innerText='⚠️ Connection Error';}
+            const today=new Date(),thirtyDaysAgo=new Date();thirtyDaysAgo.setDate(today.getDate()-30);
+            document.getElementById('startDate').value=thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value=today.toISOString().split('T')[0];
+            filteredRecords=[...allRecords];
+            updateStatusBanner();
+            updateAllVisualizations();
+            showLoader(false);
+        }
+        function updateStatusBanner(){
+            const banner=document.getElementById('dataStatusBanner');
+            if(allRecords.length===0){document.getElementById('statusTitle').innerText='No Data Found';document.getElementById('statusMessage').innerText='Add records in main app.';banner.style.borderLeftColor='#b13e3e';}
+            else{document.getElementById('statusTitle').innerText='✅ Data Loaded';document.getElementById('statusMessage').innerText=`Found ${allRecords.length} records`;banner.style.borderLeftColor='#0f7b3a';}
+            document.getElementById('dataSummary').innerText=`${allRecords.length} total records`;
+        }
+        function filterRecordsByDate(){
+            const start=document.getElementById('startDate').value,end=document.getElementById('endDate').value;
+            if(!start||!end)filteredRecords=[...allRecords];
+            else{const startDate=new Date(start),endDate=new Date(end);endDate.setHours(23,59,59);filteredRecords=allRecords.filter(r=>{if(!r.timestamp)return false;const d=new Date(r.timestamp);return d>=startDate&&d<=endDate;});}
+            updateAllVisualizations();
+        }
+        function updateAllVisualizations(){
+            const totalRevenue=filteredRecords.reduce((s,r)=>s+r.payment_amount,0);
+            const totalProfit=filteredRecords.reduce((s,r)=>s+r.profit,0);
+            const profitMargin=totalRevenue?((totalProfit/totalRevenue)*100).toFixed(1):0;
+            const checkupCount=filteredRecords.filter(r=>r.check_up==='Yes').length;
+            const checkupRate=filteredRecords.length?((checkupCount/filteredRecords.length)*100).toFixed(1):0;
+            document.getElementById('totalRevenue').innerText=formatMoney(totalRevenue);
+            document.getElementById('netProfit').innerText=formatMoney(totalProfit);
+            document.getElementById('profitMargin').innerText=profitMargin+'%';
+            document.getElementById('totalProjects').innerText=filteredRecords.length;
+            document.getElementById('checkupRate').innerText=checkupRate+'%';
+            document.getElementById('periodDays').innerText=filteredRecords.length;
+            document.getElementById('periodRevenue').innerText=formatMoney(totalRevenue);
+            document.getElementById('periodProfit').innerText=formatMoney(totalProfit);
+            updateUpcomingCheckups();
+            updateRevenueChart();
+            updateItemsChart();
+            updateDistributionChart();
+            updateMonthlyChart();
+            updateTopClients();
+            updateTopItems();
+        }
+        function updateUpcomingCheckups(){
+            const filterDays=parseInt(document.getElementById('checkupsFilter').value)||30;
+            const today=new Date(),futureDate=new Date();
+            if(filterDays!=='all')futureDate.setDate(today.getDate()+filterDays);
+            else futureDate.setFullYear(today.getFullYear()+5);
+            const upcoming=allRecords.filter(r=>{if(r.check_up!=='Yes'||!r.date)return false;const d=new Date(r.date);return d>=today&&d<=futureDate;}).sort((a,b)=>new Date(a.date)-new Date(b.date));
+            document.getElementById('upcomingCheckupsCount').innerText=upcoming.length;
+            const container=document.getElementById('checkupsContainer');
+            if(upcoming.length===0){container.innerHTML='<div class="no-checkups">No upcoming check-ups scheduled</div>';return;}
+            let html='';
+            upcoming.forEach(r=>{
+                const d=new Date(r.date),days=Math.ceil((d-today)/(1000*60*60*24));
+                let urgent='';if(days<=3)urgent='<span class="checkup-urgent">⚠️ Urgent</span>';else if(days<=7)urgent='<span class="checkup-urgent">🔔 This week</span>';
+                html+=`<div class="checkup-card"><div class="checkup-client">${r.client_name||'Unknown'}</div><div class="checkup-details"><div class="checkup-detail"><span>📍</span> ${r.address||''}</div><div class="checkup-detail"><span>💰</span> ${formatMoney(r.quotation_total)}</div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><span class="checkup-date">📅 ${d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}</span>${urgent}</div><div style="font-size:0.8rem;color:#999;">${days===0?'Today':days===1?'Tomorrow':`${days} days left`}</div></div>`;
             });
-            
-            // ---------- helpers ----------
-            const toast = (msg, type = 'info') => {
-                const container = document.getElementById('toastContainer');
-                const el = document.createElement('div');
-                el.className = `toast ${type}`;
-                el.innerText = msg;
-                container.appendChild(el);
-                setTimeout(() => el.remove(), 3500);
-            };
-
-            const showLoader = (show) => {
-                let loader = document.getElementById('globalLoader');
-                if (!loader) {
-                    loader = document.createElement('div');
-                    loader.id = 'globalLoader';
-                    loader.className = 'loader';
-                    loader.style.position = 'fixed';
-                    loader.style.top = '50%';
-                    loader.style.left = '50%';
-                    loader.style.transform = 'translate(-50%,-50%)';
-                    loader.style.zIndex = '10000';
-                    document.body.appendChild(loader);
-                }
-                loader.style.display = show ? 'block' : 'none';
-            };
-
-            const formatMoney = (val) => {
-                const num = Number(val) || 0;
-                return '₦' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            };
-            
-            // parse quotation items
-            const parseItemsFromString = (str) => {
-                if (!str || str === 'null' || str === 'undefined') return [];
-                try {
-                    return str.split(',').map(s => {
-                        const parts = s.trim().split('-');
-                        return { 
-                            name: parts[0] || 'Unknown', 
-                            quantity: parseFloat(parts[1]) || 0, 
-                            unitPrice: parseFloat(parts[2]) || 0 
-                        };
-                    }).filter(i => i.name && i.name !== '');
-                } catch (e) {
-                    return [];
-                }
-            };
-
-            // update status banner
-            function updateStatusBanner() {
-                const banner = document.getElementById('dataStatusBanner');
-                const title = document.getElementById('statusTitle');
-                const message = document.getElementById('statusMessage');
-                
-                if (allRecords.length === 0) {
-                    title.innerText = 'No Data Found';
-                    message.innerText = 'Your Google Sheet appears to be empty. Add some records in the main app to see analytics.';
-                    banner.style.borderLeftColor = '#b13e3e';
-                } else {
-                    title.innerText = `✅ Data Loaded Successfully`;
-                    message.innerText = `Found ${allRecords.length} records in your Google Sheet. Last updated: ${new Date().toLocaleString()}`;
-                    banner.style.borderLeftColor = '#0f7b3a';
-                }
-                
-                document.getElementById('dataSummary').innerText = `${allRecords.length} total records`;
-            }
-
-            // Update upcoming check-ups
-            function updateUpcomingCheckups() {
-                const filterDays = parseInt(document.getElementById('checkupsFilter').value) || 30;
-                const today = new Date();
-                const futureDate = new Date();
-                
-                if (filterDays !== 'all') {
-                    futureDate.setDate(today.getDate() + filterDays);
-                } else {
-                    futureDate.setFullYear(today.getFullYear() + 5); // Far future for "all"
-                }
-                
-                // Filter records with check-ups needed and valid future dates
-                const upcomingCheckups = allRecords.filter(record => {
-                    if (record.check_up !== 'Yes' || !record.date) return false;
-                    
-                    const checkupDate = new Date(record.date);
-                    return checkupDate >= today && checkupDate <= futureDate;
-                }).sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by nearest first
-                
-                document.getElementById('upcomingCheckupsCount').innerText = upcomingCheckups.length;
-                
-                const container = document.getElementById('checkupsContainer');
-                
-                if (upcomingCheckups.length === 0) {
-                    container.innerHTML = '<div class="no-checkups">No upcoming check-ups scheduled</div>';
-                    return;
-                }
-                
-                let html = '';
-                upcomingCheckups.forEach(record => {
-                    const checkupDate = new Date(record.date);
-                    const daysUntil = Math.ceil((checkupDate - today) / (1000 * 60 * 60 * 24));
-                    
-                    // Determine urgency
-                    let urgencyClass = '';
-                    let urgencyText = '';
-                    if (daysUntil <= 3) {
-                        urgencyClass = 'checkup-urgent';
-                        urgencyText = '⚠️ Urgent';
-                    } else if (daysUntil <= 7) {
-                        urgencyClass = 'checkup-urgent';
-                        urgencyText = '🔔 This week';
-                    }
-                    
-                    const formattedDate = checkupDate.toLocaleDateString('en-NG', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                    
-                    html += `
-                        <div class="checkup-card">
-                            <div class="checkup-client">${record.client_name || 'Unknown Client'}</div>
-                            <div class="checkup-details">
-                                <div class="checkup-detail">
-                                    <span>📍</span> ${record.address || 'No address'}
-                                </div>
-                                <div class="checkup-detail">
-                                    <span>📞</span> ${record.quotation_ref || 'No reference'}
-                                </div>
-                                <div class="checkup-detail">
-                                    <span>💰</span> ${formatMoney(record.quotation_total)}
-                                </div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                                <span class="checkup-date">📅 ${formattedDate}</span>
-                                ${urgencyText ? `<span class="${urgencyClass}">${urgencyText}</span>` : ''}
-                            </div>
-                            <div style="font-size: 0.8rem; color: #999; margin-top: 8px;">
-                                ${daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `${daysUntil} days left`}
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                container.innerHTML = html;
-            }
-
-            // fetch data with better error handling
-            async function fetchData() {
-                showLoader(true);
-                
-                // Update status to loading
-                document.getElementById('statusTitle').innerText = 'Loading data...';
-                document.getElementById('statusMessage').innerText = 'Connecting to Google Sheets...';
-                
-                try {
-                    // Test connection first
-                    const testRes = await fetch(`${API_URL}?action=test`);
-                    if (!testRes.ok) {
-                        throw new Error('Cannot connect to API');
-                    }
-                    
-                    // Fetch actual data
-                    const res = await fetch(`${API_URL}?action=getAll`);
-                    const data = await res.json();
-                    
-                    console.log('Raw API response:', data);
-                    
-                    if (data.records && Array.isArray(data.records)) {
-                        allRecords = data.records.map(record => {
-                            // Parse numeric values safely
-                            return {
-                                ...record,
-                                parsedItems: parseItemsFromString(record.quotation_details),
-                                profit: parseFloat(record.profit) || 0,
-                                payment_amount: parseFloat(record.payment_amount) || 0,
-                                quotation_total: parseFloat(record.quotation_total) || 0,
-                                material_cost: parseFloat(record.material_cost) || 0,
-                                transport_cost: parseFloat(record.transport_cost) || 0,
-                                other_cost: parseFloat(record.other_cost) || 0
-                            };
-                        });
-                        
-                        toast(`Loaded ${allRecords.length} records successfully`, 'success');
-                    } else {
-                        allRecords = [];
-                        toast('No records found in sheet', 'info');
-                    }
-                    
-                } catch (e) {
-                    console.error('Fetch error:', e);
-                    allRecords = [];
-                    toast('Failed to load data. Check API URL and CORS settings.', 'error');
-                    
-                    document.getElementById('statusTitle').innerText = '⚠️ Connection Error';
-                    document.getElementById('statusMessage').innerText = 'Could not connect to Google Sheets. Verify your API URL and deploy the Apps Script as a web app with "Anyone" access.';
-                }
-                
-                // Set default date range
-                const today = new Date();
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(today.getDate() - 30);
-                
-                document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-                document.getElementById('endDate').value = today.toISOString().split('T')[0];
-                
-                filteredRecords = [...allRecords];
-                updateStatusBanner();
-                updateAllVisualizations();
-                showLoader(false);
-            }
-
-            // filter records by date
-            function filterRecordsByDate() {
-                const start = document.getElementById('startDate').value;
-                const end = document.getElementById('endDate').value;
-                
-                if (!start || !end) {
-                    filteredRecords = [...allRecords];
-                } else {
-                    const startDate = new Date(start);
-                    const endDate = new Date(end);
-                    endDate.setHours(23, 59, 59);
-                    
-                    filteredRecords = allRecords.filter(record => {
-                        if (!record.timestamp) return false;
-                        const recordDate = new Date(record.timestamp);
-                        return recordDate >= startDate && recordDate <= endDate;
-                    });
-                }
-                
-                updateAllVisualizations();
-            }
-
-            // update all visualizations
-            function updateAllVisualizations() {
-                // Update KPI cards
-                const totalRevenue = filteredRecords.reduce((sum, r) => sum + r.payment_amount, 0);
-                const totalProfit = filteredRecords.reduce((sum, r) => sum + r.profit, 0);
-                const profitMargin = totalRevenue ? ((totalProfit / totalRevenue) * 100).toFixed(1) : 0;
-                const checkupCount = filteredRecords.filter(r => r.check_up === 'Yes').length;
-                const checkupRate = filteredRecords.length ? ((checkupCount / filteredRecords.length) * 100).toFixed(1) : 0;
-                
-                document.getElementById('totalRevenue').innerText = formatMoney(totalRevenue);
-                document.getElementById('netProfit').innerText = formatMoney(totalProfit);
-                document.getElementById('profitMargin').innerText = profitMargin + '%';
-                document.getElementById('totalProjects').innerText = filteredRecords.length;
-                document.getElementById('checkupRate').innerText = checkupRate + '%';
-                
-                // Update date range stats
-                document.getElementById('periodDays').innerText = filteredRecords.length;
-                document.getElementById('periodRevenue').innerText = formatMoney(totalRevenue);
-                document.getElementById('periodProfit').innerText = formatMoney(totalProfit);
-                
-                // Update upcoming check-ups
-                updateUpcomingCheckups();
-                
-                // Update charts
-                updateRevenueChart();
-                updateItemsChart();
-                updateDistributionChart();
-                updateMonthlyChart();
-                updateTopClients();
-                updateTopItems();
-            }
-
-            // revenue chart
-            function updateRevenueChart() {
-                const ctx = document.getElementById('revenueChart').getContext('2d');
-                
-                // Group by month
-                const monthlyData = {};
-                filteredRecords.forEach(record => {
-                    if (record.timestamp) {
-                        const date = new Date(record.timestamp);
-                        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                        
-                        if (!monthlyData[monthKey]) {
-                            monthlyData[monthKey] = { revenue: 0, profit: 0 };
-                        }
-                        monthlyData[monthKey].revenue += record.payment_amount;
-                        monthlyData[monthKey].profit += record.profit;
-                    }
-                });
-                
-                const sortedMonths = Object.keys(monthlyData).sort();
-                const revenues = sortedMonths.map(m => monthlyData[m].revenue);
-                const profits = sortedMonths.map(m => monthlyData[m].profit);
-                
-                if (charts.revenueChart) charts.revenueChart.destroy();
-                
-                if (sortedMonths.length === 0) {
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#999';
-                    ctx.fillText('No data available', 50, 150);
-                    return;
-                }
-                
-                charts.revenueChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: sortedMonths,
-                        datasets: [
-                            {
-                                label: 'Revenue',
-                                data: revenues,
-                                borderColor: '#F28500',
-                                backgroundColor: '#F2850020',
-                                tension: 0.4,
-                                fill: true
-                            },
-                            {
-                                label: 'Profit',
-                                data: profits,
-                                borderColor: '#0f7b3a',
-                                backgroundColor: '#0f7b3a20',
-                                tension: 0.4,
-                                fill: true
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' }
-                        }
-                    }
-                });
-            }
-
-            // items chart
-            function updateItemsChart() {
-                const ctx = document.getElementById('itemsChart').getContext('2d');
-                
-                // Aggregate item data
-                const itemStats = {};
-                filteredRecords.forEach(record => {
-                    record.parsedItems.forEach(item => {
-                        if (item.name && item.name !== 'Unknown') {
-                            if (!itemStats[item.name]) {
-                                itemStats[item.name] = { revenue: 0, count: 0 };
-                            }
-                            itemStats[item.name].revenue += item.quantity * item.unitPrice;
-                            itemStats[item.name].count++;
-                        }
-                    });
-                });
-                
-                const topItems = Object.entries(itemStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 8);
-                
-                if (charts.itemsChart) charts.itemsChart.destroy();
-                
-                if (topItems.length === 0) {
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#999';
-                    ctx.fillText('No item data available', 50, 150);
-                    return;
-                }
-                
-                charts.itemsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: topItems.map(i => i[0]),
-                        datasets: [{
-                            label: 'Revenue',
-                            data: topItems.map(i => i[1].revenue),
-                            backgroundColor: '#F28500',
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        plugins: {
-                            legend: { display: false }
-                        }
-                    }
-                });
-            }
-
-            // distribution chart
-            function updateDistributionChart() {
-                const ctx = document.getElementById('distributionChart').getContext('2d');
-                
-                const ranges = [
-                    { min: -Infinity, max: 0, label: 'Loss', color: '#b13e3e' },
-                    { min: 0, max: 100000, label: '₦0 - ₦100k', color: '#F28500' },
-                    { min: 100000, max: 500000, label: '₦100k - ₦500k', color: '#D6CB8D' },
-                    { min: 500000, max: 1000000, label: '₦500k - ₦1M', color: '#0f7b3a' },
-                    { min: 1000000, max: Infinity, label: '₦1M+', color: '#0f7b3a' }
-                ];
-                
-                const distribution = ranges.map(r => ({
-                    label: r.label,
-                    count: filteredRecords.filter(rec => rec.profit > r.min && rec.profit <= r.max).length,
-                    color: r.color
-                })).filter(d => d.count > 0);
-                
-                if (charts.distributionChart) charts.distributionChart.destroy();
-                
-                if (distribution.length === 0) {
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#999';
-                    ctx.fillText('No data available', 50, 150);
-                    return;
-                }
-                
-                charts.distributionChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: distribution.map(d => d.label),
-                        datasets: [{
-                            data: distribution.map(d => d.count),
-                            backgroundColor: distribution.map(d => d.color),
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' }
-                        }
-                    }
-                });
-            }
-
-            // monthly chart
-            function updateMonthlyChart() {
-                const ctx = document.getElementById('monthlyChart').getContext('2d');
-                
-                const monthlyProfit = {};
-                filteredRecords.forEach(record => {
-                    if (record.timestamp) {
-                        const date = new Date(record.timestamp);
-                        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                        monthlyProfit[monthKey] = (monthlyProfit[monthKey] || 0) + record.profit;
-                    }
-                });
-                
-                const sortedMonths = Object.keys(monthlyProfit).sort().slice(-6);
-                const profits = sortedMonths.map(m => monthlyProfit[m]);
-                
-                if (charts.monthlyChart) charts.monthlyChart.destroy();
-                
-                if (sortedMonths.length === 0) {
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#999';
-                    ctx.fillText('No data available', 50, 150);
-                    return;
-                }
-                
-                charts.monthlyChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: sortedMonths,
-                        datasets: [{
-                            label: 'Profit/Loss',
-                            data: profits,
-                            backgroundColor: profits.map(p => p >= 0 ? '#0f7b3a' : '#b13e3e'),
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        }
-                    }
-                });
-            }
-
-            // top clients table
-            function updateTopClients() {
-                const clientStats = {};
-                filteredRecords.forEach(record => {
-                    const client = record.client_name || 'Unknown';
-                    if (!clientStats[client]) {
-                        clientStats[client] = { revenue: 0, profit: 0, count: 0 };
-                    }
-                    clientStats[client].revenue += record.payment_amount;
-                    clientStats[client].profit += record.profit;
-                    clientStats[client].count++;
-                });
-                
-                const topClients = Object.entries(clientStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 10);
-                
-                const tbody = document.getElementById('topClientsBody');
-                if (topClients.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="no-data">No client data available</td></tr>';
-                } else {
-                    tbody.innerHTML = topClients.map(([client, stats]) => `
-                        <tr>
-                            <td><strong>${client}</strong></td>
-                            <td>${stats.count}</td>
-                            <td>${formatMoney(stats.revenue)}</td>
-                            <td class="${stats.profit >= 0 ? 'profit' : 'loss'}">${formatMoney(stats.profit)}</td>
-                        </tr>
-                    `).join('');
-                }
-            }
-
-            // top items table
-            function updateTopItems() {
-                const itemStats = {};
-                filteredRecords.forEach(record => {
-                    record.parsedItems.forEach(item => {
-                        if (item.name && item.name !== 'Unknown') {
-                            if (!itemStats[item.name]) {
-                                itemStats[item.name] = { 
-                                    revenue: 0, 
-                                    count: 0, 
-                                    totalQty: 0,
-                                    totalPrice: 0 
-                                };
-                            }
-                            itemStats[item.name].revenue += item.quantity * item.unitPrice;
-                            itemStats[item.name].count++;
-                            itemStats[item.name].totalQty += item.quantity;
-                            itemStats[item.name].totalPrice += item.unitPrice;
-                        }
-                    });
-                });
-                
-                const topItems = Object.entries(itemStats)
-                    .sort((a, b) => b[1].revenue - a[1].revenue)
-                    .slice(0, 10);
-                
-                const tbody = document.getElementById('topItemsBody');
-                if (topItems.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="no-data">No item data available</td></tr>';
-                } else {
-                    tbody.innerHTML = topItems.map(([item, stats]) => `
-                        <tr>
-                            <td><strong>${item}</strong></td>
-                            <td>${stats.count} projects</td>
-                            <td>${formatMoney(stats.revenue)}</td>
-                            <td>${formatMoney(stats.totalPrice / stats.count)}</td>
-                        </tr>
-                    `).join('');
-                }
-            }
-
-            // login logic
-            if (sessionStorage.getItem('auth') === 'true') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('dashboardMain').style.display = 'block';
-                fetchData();
-            }
-
-            document.getElementById('loginBtn').addEventListener('click', () => {
-                const pwd = document.getElementById('passwordInput').value;
-                if (pwd === PASSWORD) {
-                    sessionStorage.setItem('auth', 'true');
-                    document.getElementById('loginScreen').style.display = 'none';
-                    document.getElementById('dashboardMain').style.display = 'block';
-                    fetchData();
-                } else {
-                    document.getElementById('loginError').innerText = 'Incorrect password';
-                }
-            });
-
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                sessionStorage.removeItem('auth');
-                location.reload();
-            });
-
-            document.getElementById('refreshData').addEventListener('click', fetchData);
-            document.getElementById('applyDateFilter').addEventListener('click', filterRecordsByDate);
-            
-            document.getElementById('resetDateFilter').addEventListener('click', () => {
-                const today = new Date();
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(today.getDate() - 30);
-                
-                document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-                document.getElementById('endDate').value = today.toISOString().split('T')[0];
-                
-                filterRecordsByDate();
-            });
-
-            document.getElementById('checkupsFilter').addEventListener('change', updateUpcomingCheckups);
-
-            // device log
-            if (sessionStorage.getItem('auth') === 'true') {
-                navigator.userAgent && fetch(API_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: 'log', device: navigator.userAgent }) 
-                }).catch(() => {});
-            }
-        })();
+            container.innerHTML=html;
+        }
+        function updateRevenueChart(){/* same logic as before, just using formatMoney display */ const ctx=document.getElementById('revenueChart').getContext('2d'); const monthly={}; filteredRecords.forEach(r=>{if(r.timestamp){const d=new Date(r.timestamp),key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;if(!monthly[key])monthly[key]={revenue:0,profit:0};monthly[key].revenue+=r.payment_amount;monthly[key].profit+=r.profit;}}); const months=Object.keys(monthly).sort(); const revenues=months.map(m=>monthly[m].revenue),profits=months.map(m=>monthly[m].profit); if(charts.revenueChart)charts.revenueChart.destroy(); if(months.length===0){ctx.fillStyle='#999';ctx.fillText('No data',50,150);return;} charts.revenueChart=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Revenue',data:revenues,borderColor:'#F28500',backgroundColor:'#F2850020',fill:true},{label:'Profit',data:profits,borderColor:'#0f7b3a',backgroundColor:'#0f7b3a20',fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});}
+        function updateItemsChart(){const ctx=document.getElementById('itemsChart').getContext('2d'); const stats={}; filteredRecords.forEach(r=>{r.parsedItems.forEach(i=>{if(i.name&&i.name!=='Unknown'){if(!stats[i.name])stats[i.name]={revenue:0,count:0};stats[i.name].revenue+=i.quantity*i.unitPrice;stats[i.name].count++;}});}); const top=Object.entries(stats).sort((a,b)=>b[1].revenue-a[1].revenue).slice(0,8); if(charts.itemsChart)charts.itemsChart.destroy(); if(top.length===0){ctx.fillStyle='#999';ctx.fillText('No data',50,150);return;} charts.itemsChart=new Chart(ctx,{type:'bar',data:{labels:top.map(t=>t[0]),datasets:[{label:'Revenue',data:top.map(t=>t[1].revenue),backgroundColor:'#F28500',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}}}});}
+        function updateDistributionChart(){const ctx=document.getElementById('distributionChart').getContext('2d'); const ranges=[{min:-Infinity,max:0,label:'Loss',color:'#b13e3e'},{min:0,max:100000,label:'$0 - $100k',color:'#F28500'},{min:100000,max:500000,label:'$100k - $500k',color:'#D6CB8D'},{min:500000,max:1000000,label:'$500k - $1M',color:'#0f7b3a'},{min:1000000,max:Infinity,label:'$1M+',color:'#0f7b3a'}]; const dist=ranges.map(r=>({label:r.label,count:filteredRecords.filter(rec=>rec.profit>r.min&&rec.profit<=r.max).length,color:r.color})).filter(d=>d.count>0); if(charts.distributionChart)charts.distributionChart.destroy(); if(dist.length===0){ctx.fillStyle='#999';ctx.fillText('No data',50,150);return;} charts.distributionChart=new Chart(ctx,{type:'doughnut',data:{labels:dist.map(d=>d.label),datasets:[{data:dist.map(d=>d.count),backgroundColor:dist.map(d=>d.color),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});}
+        function updateMonthlyChart(){const ctx=document.getElementById('monthlyChart').getContext('2d'); const monthly={}; filteredRecords.forEach(r=>{if(r.timestamp){const d=new Date(r.timestamp),key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;monthly[key]=(monthly[key]||0)+r.profit;}}); const months=Object.keys(monthly).sort().slice(-6); const profits=months.map(m=>monthly[m]); if(charts.monthlyChart)charts.monthlyChart.destroy(); if(months.length===0){ctx.fillStyle='#999';ctx.fillText('No data',50,150);return;} charts.monthlyChart=new Chart(ctx,{type:'bar',data:{labels:months,datasets:[{label:'Profit/Loss',data:profits,backgroundColor:profits.map(p=>p>=0?'#0f7b3a':'#b13e3e'),borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+        function updateTopClients(){const stats={}; filteredRecords.forEach(r=>{const c=r.client_name||'Unknown';if(!stats[c])stats[c]={revenue:0,profit:0,count:0};stats[c].revenue+=r.payment_amount;stats[c].profit+=r.profit;stats[c].count++;}); const top=Object.entries(stats).sort((a,b)=>b[1].revenue-a[1].revenue).slice(0,10); const tbody=document.getElementById('topClientsBody'); if(top.length===0)tbody.innerHTML='<tr><td colspan="4" class="no-data">No client data</td></tr>'; else tbody.innerHTML=top.map(([c,s])=>`<tr><td><strong>${c}</strong></td><td>${s.count}</td><td>${formatMoney(s.revenue)}</td><td class="${s.profit>=0?'profit':'loss'}">${formatMoney(s.profit)}</td></tr>`).join('');}
+        function updateTopItems(){const stats={}; filteredRecords.forEach(r=>{r.parsedItems.forEach(i=>{if(i.name&&i.name!=='Unknown'){if(!stats[i.name])stats[i.name]={revenue:0,count:0,totalPrice:0};stats[i.name].revenue+=i.quantity*i.unitPrice;stats[i.name].count++;stats[i.name].totalPrice+=i.unitPrice;}});}); const top=Object.entries(stats).sort((a,b)=>b[1].revenue-a[1].revenue).slice(0,10); const tbody=document.getElementById('topItemsBody'); if(top.length===0)tbody.innerHTML='<tr><td colspan="4" class="no-data">No item data</td></tr>'; else tbody.innerHTML=top.map(([i,s])=>`<tr><td><strong>${i}</strong></td><td>${s.count} projects</td><td>${formatMoney(s.revenue)}</td><td>${formatMoney(s.totalPrice/s.count)}</td></tr>`).join('');}
+        if(sessionStorage.getItem('auth')==='true'){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboardMain').style.display='block';fetchData();}
+        document.getElementById('loginBtn').addEventListener('click',()=>{const pwd=document.getElementById('passwordInput').value;if(pwd===PASSWORD){sessionStorage.setItem('auth','true');document.getElementById('loginScreen').style.display='none';document.getElementById('dashboardMain').style.display='block';fetchData();}else{document.getElementById('loginError').innerText='Incorrect password';}});
+        document.getElementById('logoutBtn').addEventListener('click',()=>{sessionStorage.removeItem('auth');location.reload();});
+        document.getElementById('backToMainBtn').addEventListener('click',()=>{window.location.href='index.html';});
+        document.getElementById('refreshData').addEventListener('click',fetchData);
+        document.getElementById('applyDateFilter').addEventListener('click',filterRecordsByDate);
+        document.getElementById('resetDateFilter').addEventListener('click',()=>{const today=new Date(),ago=new Date();ago.setDate(today.getDate()-30);document.getElementById('startDate').value=ago.toISOString().split('T')[0];document.getElementById('endDate').value=today.toISOString().split('T')[0];filterRecordsByDate();});
+        document.getElementById('checkupsFilter').addEventListener('change',updateUpcomingCheckups);
+        if(sessionStorage.getItem('auth')==='true') navigator.userAgent&&fetch(API_URL,{method:'POST',body:JSON.stringify({action:'log',device:navigator.userAgent})}).catch(()=>{});
     </script>
 </body>
 </html>
